@@ -1,6 +1,6 @@
-const dbConfig = require('../../common/dbconfig');
+const dbConfig = require('../common/dbconfig');
 
-async function run(oracledb) {
+async function run(oracledb, obj) {
   let connection;
 
   try {
@@ -14,13 +14,19 @@ async function run(oracledb) {
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
+    
     let query = `
-    SELECT PUR_CD ||','||PUR_KIS AS VALUE, PUR_NM AS NAME FROM TB_BAS_PURINFO WHERE PUR_USE='Y' ORDER BY PUR_SORT ASC
+    SELECT 
+      USER_ID, 
+      USER_NM, 
+      AUTH_SEQ, 
+      ORG_CD
+    FROM TB_BAS_USER 
+    WHERE USER_ID=:userId
     `
-    result = await connection.execute(query, [], options);
+    result = await connection.execute(query, obj, options);
     
     let rst = result.rows;
-    
     return rst;
   } catch (err) {
     console.error(err);

@@ -13,13 +13,13 @@ const getData = async (url, obj, res) => {
     return await require(url).run(oracledb, obj, res);
 }
 
-app.post('/login_process', (req, res) => {
+app.post('/login/AuthLogin', (req, res) => {
     // ! 세션 관리 로직 추가 필요
     let Obj = new Object();
     const jsonObj = req.body;
     async function userINFO() {
         try {
-            const getUinfo = await getData('./dbproc/login/login_process',jsonObj, res);
+            const getUinfo = await getData('./login/AuthLogin',jsonObj, res);
             // const getUinfo = await require('./dbproc/login/login_process').run(oracledb, jsonObj, res);
             console.log(getUinfo)
             let key = Object.keys(getUinfo)[0];
@@ -29,11 +29,11 @@ app.post('/login_process', (req, res) => {
 
             function getUserAll() {
                 return Promise.all([
-                    require('./dbproc/login/login_UserMenu').run(oracledb, getUinfo[0]),
-                    require('./dbproc/login/login_SearchBox').run(oracledb, getUinfo[0]),
-                    require('./dbproc/login/login_UserDepart').run(oracledb, getUinfo[0]),
-                    require('./dbproc/login/login_UserTid').run(oracledb, getUinfo[0]),
-                    require('./dbproc/login/login_UserAcq').run(oracledb)
+                    require('./login/login_UserMenu').run(oracledb, getUinfo[0]),
+                    require('./login/login_SearchBox').run(oracledb, getUinfo[0]),
+                    require('./login/login_UserDepart').run(oracledb, getUinfo[0]),
+                    require('./login/login_UserTid').run(oracledb, getUinfo[0]),
+                    require('./login/login_UserAcq').run(oracledb)
                 ])
                     .then((res) => { return res; })
             }
@@ -55,10 +55,11 @@ app.post('/login_process', (req, res) => {
 app.route('/sub_main/header/:reqUrl')
     .get((req, res) => {
         const jsonObj = req.query;
+        console.log("url",req.originalUrl)
 
         switch (req.params.reqUrl) {
             case 'memGet':
-                getData('./dbproc/login/login_memGet', jsonObj, res).then(res.send.bind(res));
+                getData('./login/login_memGet', jsonObj, res).then(res.send.bind(res));
                 break;
             case 'userFav':
                 getData('./dbproc/header/header_userFav', jsonObj, res).then(res.send.bind(res));

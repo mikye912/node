@@ -1,9 +1,7 @@
-const dbConfig = require('../../common/dbconfig');
+const dbConfig = require('../common/dbconfig');
 
-async function run(oracledb, obj) {
+async function run(oracledb) {
   let connection;
-
-  let whDepCd = obj.MEMBER_DEPO ? ` AND DEP_CD = '${obj.MEMBER_DEPO}' ` : ``;
 
   try {
     connection = await oracledb.getConnection({
@@ -17,19 +15,9 @@ async function run(oracledb, obj) {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
     let query = `
-      SELECT 
-        TERM_NM AS NAME,
-        TERM_ID AS VALUE
-      FROM TB_BAS_TIDMST 
-      WHERE ORG_CD=:orgCd AND TERM_ID IN ( 
-        SELECT 
-          TID 
-        FROM TB_BAS_TIDMAP 
-          WHERE ORG_CD=:orgCd ${whDepCd}
-        ) 
-      ORDER BY TERM_SORT ASC
+    SELECT PUR_CD ||','||PUR_KIS AS VALUE, PUR_NM AS NAME FROM TB_BAS_PURINFO WHERE PUR_USE='Y' ORDER BY PUR_SORT ASC
     `
-    result = await connection.execute(query, {orgCd : obj.MEMBER_ORG}, options);
+    result = await connection.execute(query, [], options);
     
     let rst = result.rows;
     
