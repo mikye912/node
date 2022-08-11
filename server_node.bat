@@ -1,0 +1,1 @@
+pm2 start startscript.js --name "ifou_node"
