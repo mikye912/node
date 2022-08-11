@@ -171,44 +171,5 @@ module.exports = {
             console.log(err)
         }
         return this.base64Enc(JSON.stringify(arrFin));
-    },
-    uDepart_base64(arrObj) {
-        let rtnStr = "";
-
-        rtnStr += "<select name='depcd' id='depcd' style='font-size:9pt;' class='searchbox_drop'>";
-        rtnStr += "<option value=''>:: 사업부선택 ::</option>";
-        for (i = 0; i < arrObj.length; i++) {
-            if (arrObj[i].DEP_CD) {
-                rtnStr += "<option value='" + arrObj[i].DEP_CD + "'>" + arrObj[i].DEP_NM + "</option>";
-            }
-        }
-        rtnStr += "</select>";
-        return this.base64Enc(rtnStr);
-    },
-    uTid_base64(arrObj) {
-        let rtnStr = "";
-
-        rtnStr += "<select name='tid' id='tid' style='font-size:9pt;' class='searchbox_drop'>";
-        rtnStr += "<option value=''>:: 단말기선택 ::</option>";
-        for (i = 0; i < arrObj.length; i++) {
-            if (arrObj[i].TERM_ID) {
-                rtnStr += "<option value='" + arrObj[i].TERM_ID + "'>" + arrObj[i].TERM_NM + "(" + arrObj[i].TERM_ID + ")</option>";
-            }
-        }
-        rtnStr += "</select>";
-        return this.base64Enc(rtnStr);
-    },
-    uAcq_base64(arrObj) {
-        let rtnStr = "";
-
-        rtnStr += "<select name='acqcd' id='acqcd' style='font-size:9pt;' class='searchbox_drop'>";
-        rtnStr += "<option value=''>:: 카드사선택 ::</option>";
-        for (i = 0; i < arrObj.length; i++) {
-            if (arrObj[i].PUR_CD) {
-                rtnStr += "<option value='" + arrObj[i].PUR_CD + "," + arrObj[i].PUR_KIS + "'>" + arrObj[i].PUR_NM + "</option>";
-            }
-        }
-        rtnStr += "</select>";
-        return this.base64Enc(rtnStr);
-    },
+    }
 }

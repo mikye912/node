@@ -52,16 +52,16 @@ app.post('/login/AuthLogin', (req, res) => {
     userINFO().then(res.send.bind(res));
 });
 
-app.route('/sub_main/header/:reqUrl')
+app.route('/Main/HeaderBar/:reqUrl')
     .get((req, res) => {
         const jsonObj = req.query;
         console.log("url",req.originalUrl)
 
         switch (req.params.reqUrl) {
-            case 'memGet':
-                getData('./login/login_memGet', jsonObj, res).then(res.send.bind(res));
+            case 'getUserName':
+                getData('./Main/HeaderBar/getUserName', jsonObj, res).then(res.send.bind(res));
                 break;
-            case 'userFav':
+            case 'getUserMenu':
                 getData('./dbproc/header/header_userFav', jsonObj, res).then(res.send.bind(res));
                 break;
             default:
