@@ -1,4 +1,4 @@
-const dbConfig = require('../../common/dbconfig');
+const dbConfig = require('$Common/dbconfig');
 
 async function run(oracledb, obj) {
   let connection;

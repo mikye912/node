@@ -1,4 +1,5 @@
-const common = require('./common/common');
+require('better-module-alias')(__dirname);
+const common = require('$Common/common');
 const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: "./instantclient_21_3" })
 const express = require('express');
@@ -10,6 +11,7 @@ app.listen(PORT, () => {
 app.use(express.json());
 
 const getData = async (url, obj, res) => {
+    console.log(url);
     return await require(url).run(oracledb, obj, res);
 }
 
@@ -19,7 +21,7 @@ app.post('/login/AuthLogin', (req, res) => {
     const jsonObj = req.body;
     async function userINFO() {
         try {
-            const getUinfo = await getData('./login/AuthLogin',jsonObj, res);
+            const getUinfo = await getData('$Login/AuthLogin',jsonObj, res);
             // const getUinfo = await require('./dbproc/login/login_process').run(oracledb, jsonObj, res);
             console.log(getUinfo)
             let key = Object.keys(getUinfo)[0];
@@ -29,11 +31,11 @@ app.post('/login/AuthLogin', (req, res) => {
 
             function getUserAll() {
                 return Promise.all([
-                    require('./login/login_UserMenu').run(oracledb, getUinfo[0]),
-                    require('./login/login_SearchBox').run(oracledb, getUinfo[0]),
-                    require('./login/login_UserDepart').run(oracledb, getUinfo[0]),
-                    require('./login/login_UserTid').run(oracledb, getUinfo[0]),
-                    require('./login/login_UserAcq').run(oracledb)
+                    require('$Login/login_UserMenu').run(oracledb, getUinfo[0]),
+                    require('$Login/login_SearchBox').run(oracledb, getUinfo[0]),
+                    require('$Login/login_UserDepart').run(oracledb, getUinfo[0]),
+                    require('$Login/login_UserTid').run(oracledb, getUinfo[0]),
+                    require('$Login/login_UserAcq').run(oracledb)
                 ])
                     .then((res) => { return res; })
             }
@@ -59,7 +61,7 @@ app.route('/Main/HeaderBar/:reqUrl')
 
         switch (req.params.reqUrl) {
             case 'getUserName':
-                getData('./Main/HeaderBar/getUserName', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/HeaderBar/getUserName', jsonObj, res).then(res.send.bind(res));
                 break;
             case 'getUserMenu':
                 getData('./dbproc/header/header_userFav', jsonObj, res).then(res.send.bind(res));
