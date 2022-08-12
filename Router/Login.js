@@ -8,7 +8,7 @@ router.post('/AuthLogin', (req, res) => {
     let Obj = new Object();
     const jsonObj = req.body;
     async function userINFO() {
-        try {
+        try { 
             const getUinfo = await dbconn.getData('$Login/AuthLogin',jsonObj, res);
 
             let key = Object.keys(getUinfo)[0];
