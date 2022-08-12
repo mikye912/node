@@ -11,11 +11,10 @@ app.listen(PORT, () => {
 app.use(express.json());
 
 const getData = async (url, obj, res) => {
-    console.log(url);
     return await require(url).run(oracledb, obj, res);
 }
 
-app.post('/login/AuthLogin', (req, res) => {
+app.post('/Login/AuthLogin', (req, res) => {
     // ! 세션 관리 로직 추가 필요
     let Obj = new Object();
     const jsonObj = req.body;
@@ -57,14 +56,13 @@ app.post('/login/AuthLogin', (req, res) => {
 app.route('/Main/HeaderBar/:reqUrl')
     .get((req, res) => {
         const jsonObj = req.query;
-        console.log("url",req.originalUrl)
 
         switch (req.params.reqUrl) {
             case 'getUserName':
                 getData('$Main/HeaderBar/getUserName', jsonObj, res).then(res.send.bind(res));
                 break;
-            case 'getUserMenu':
-                getData('./dbproc/header/header_userFav', jsonObj, res).then(res.send.bind(res));
+            case 'getUserFav':
+                getData('$Main/HeaderBar/getUserFav', jsonObj, res).then(res.send.bind(res));
                 break;
             default:
                 break;
@@ -73,7 +71,7 @@ app.route('/Main/HeaderBar/:reqUrl')
     .put((req, res) => {
         const jsonObj = req.body;
         switch (req.params.reqUrl) {
-            case 'userFav':
+            case 'setUserFav':
                 let arrSeq = new Array();
                 let obj = new Object();
                 let seq = '';
@@ -88,7 +86,7 @@ app.route('/Main/HeaderBar/:reqUrl')
                 obj.userId = jsonObj.userId;
                 obj.seq = seq;
                 obj.sort = jsonObj.right.length > 0 ? sql : sort;
-                getData('./dbproc/header/header_setUserFav', obj, res).then(res.send.bind(res));
+                getData('$Main/HeaderBar/setUserFav', obj, res).then(res.send.bind(res));
                 break;
             default:
                 break;
@@ -96,13 +94,13 @@ app.route('/Main/HeaderBar/:reqUrl')
     })
 
 
-app.route('/sub_main/sub_0000/:reqUrl')
+app.route('/Main/Content/Sub0000/:reqUrl')
     .get((req, res) => {
         const jsonObj = req.body;
 
         switch (req.params.reqUrl) {
             case 'notice_0000':
-                getData('./dbproc/dataTotal/main_notice', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/Content/Sub0000/notice_0000', jsonObj, res).then(res.send.bind(res));
                 break;
             default:
                 break;
@@ -112,31 +110,18 @@ app.route('/sub_main/sub_0000/:reqUrl')
         const jsonObj = req.body;
         switch (req.params.reqUrl) {
             case 'chart_0000':
-                getData('./dbproc/dataTotal/main_Chart', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/Content/Sub0000/chart_0000', jsonObj, res).then(res.send.bind(res));
                 break;
             case 'sales_0000':
-                getData('./dbproc/dataTotal/main_sales', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/Content/Sub0000/sales_0000', jsonObj, res).then(res.send.bind(res));
                 break;
             case 'depo_0000':
-                getData('./dbproc/dataTotal/main_depo', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/Content/Sub0000/depo_0000', jsonObj, res).then(res.send.bind(res));
                 break;
             case 'chartData_0000':
-                getData('./dbproc/dataTotal/main_ChartData', jsonObj, res).then(res.send.bind(res));
+                getData('$Main/Content/Sub0000/chartData_0000', jsonObj, res).then(res.send.bind(res));
                 break;
             default:
                 break;
         }
     })
-
-app.get('/sub_main/content/searchBox', (req, res) => {
-    const jsonObj = req.query;
-    getData('./dbproc/login/login_SearchBox', jsonObj, res).then(res.send.bind(res));
-});
-
-// app.post('/sub_main/content/sub_0201', (req, res) => {
-//     const jsonObj = req.body;
-//     async function getData() {
-//         return await require('./dbproc/header/header_userFav').run(oracledb, jsonObj, res);
-//     }
-//     getUserFav().then(res.send.bind(res));
-// });
