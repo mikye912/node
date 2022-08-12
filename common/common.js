@@ -1,5 +1,3 @@
-const { json } = require("express");
-
 module.exports = {
     base64Enc(str) {
         return Buffer.from(str, "utf-8").toString('base64');
