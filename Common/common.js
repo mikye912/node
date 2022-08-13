@@ -27,24 +27,23 @@ module.exports = {
                         jsonSubObj.path = arrObj[k].MURL;
                         jsonSubObj.name = arrObj[k].MENU_NAME;
                         jsonSubObj.seq = arrObj[k].MENU_SEQ;
-                        arrSubMenu.push(jsonSubObj);
+                        arrSubMenu = [...arrSubMenu, jsonSubObj];
                     }
                 }
             }
 
             if (arrObj[i].MENU_SEQ.length < 4) {
                 jsonObj.subRoutes = arrSubMenu;
-                arrMenu.push(jsonObj);
+                arrMenu = [...arrMenu, jsonObj];
             } else if (arrObj[i].MENU_DEPTH == 0) {
                 jsonObj.path = arrObj[i].MURL;
-                arrMenu.push(jsonObj);
+                arrMenu = [...arrMenu, jsonObj];
             }
         }
         //console.log(JSON.stringify(arrMenu));
         return this.base64Enc(JSON.stringify(arrMenu));
     },
     uSearch_base64(uSearch, uDepart, uTid, uAcq) {
-        //console.log("uSearch : "+JSON.stringify(uSearch)+" uDepart : "+JSON.stringify(uDepart)+" uTid : "+JSON.stringify(uTid)+" uAcq : "+JSON.stringify(uAcq));
         let arrFin = new Array();
         let jsonFin = new Object();
         let arrObj = new Array();
@@ -142,25 +141,25 @@ module.exports = {
                 if (i !== uSearch.length - 1) {
                     if (uSearch[i].PAGE === uSearch[i + 1].PAGE) {
                         setJsonObj(uSearch[i]);
-                        arrObj.push(jsonObj);
+                        arrObj = [...arrObj, jsonObj];
                     }else{
                         setJsonObj(uSearch[i]);
-                        arrObj.push(jsonObj);
+                        arrObj = [...arrObj, jsonObj];
                         jsonFin = {};
                         jsonFin = {
                             [uSearch[i].PAGE] : arrObj
                         };
-                        arrFin.push(jsonFin);
+                        arrFin = [...arrFin, jsonFin];
                         arrObj = [];
                     }
                 } else {
                     setJsonObj(uSearch[i]);
-                    arrObj.push(jsonObj);
+                    arrObj = [...arrObj, jsonObj];
                     jsonFin = {};
                     jsonFin = {
                         [uSearch[i].PAGE]: arrObj
                     };
-                    arrFin.push(jsonFin);
+                    arrFin = [...arrFin, jsonFin];
                     arrObj = [];
                 }
             }
