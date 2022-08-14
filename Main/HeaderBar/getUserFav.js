@@ -1,13 +1,13 @@
-const dbConfig = require('$Common/dbconfig');
+const config = require('$Common/config');
 
 async function run(oracledb, obj) {
     let connection;
 
     try {
         connection = await oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
+            user: config.user,
+            password: config.password,
+            connectString: config.connectString
         });
         oracledb.autoCommit = true;
 

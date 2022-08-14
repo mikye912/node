@@ -1,4 +1,4 @@
-const dbConfig = require('$Common/dbconfig');
+const config = require('$Common/config');
 
 async function run(oracledb, obj, res) {
   let connection;
@@ -21,9 +21,9 @@ async function run(oracledb, obj, res) {
 
   try {
     connection = await oracledb.getConnection({
-      user: dbConfig.user,
-      password: dbConfig.password,
-      connectString: dbConfig.connectString
+      user: config.user,
+      password: config.password,
+      connectString: config.connectString
     });
     oracledb.autoCommit = true;
 
@@ -101,7 +101,7 @@ async function run(oracledb, obj, res) {
         jsonObj.USER_LV = rst[0].USER_LV;
         jsonObj.AUTH_SEQ = rst[0].AUTH_SEQ;
         jsonObj.TRANS_NO = rst[0].TRANS_NO;
-        rstMsg.push(jsonObj);
+        rstMsg = [...rstMsg, jsonObj];
       }
     } else {
       throw {errMsg: '아이디를 확인하여 주십시오.'};
