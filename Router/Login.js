@@ -1,12 +1,14 @@
 const common = require('$Common/common');
 const dbconn = require('$Common/dbconn');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 router.post('/AuthLogin', (req, res) => {
     // ! 세션 관리 로직 추가 필요
     let Obj = new Object();
     const jsonObj = req.body;
+    const secret = req.app.get('jwt_secret');
     async function userINFO() {
         try { 
             const getUinfo = await dbconn.getData('$Login/AuthLogin',jsonObj, res);
@@ -27,6 +29,23 @@ router.post('/AuthLogin', (req, res) => {
                 Obj.uMenu = common.uMenu_base64(res[0]);
                 Obj.uSearch = common.uSearch_base64(res[1], res[2], res[3], res[4]);
             });
+
+            const p = new Promise((resolve, reject) => {
+                jwt.sign(
+                    {
+                        uInfo : Obj.uInfo
+                    }, 
+                    secret, 
+                    {
+                        expiresIn: '7d',
+                        subject: 'uInfo'
+                    }, (err, token) => {
+                        if (err) reject(err)
+                        resolve(token) 
+                    })
+            })
+            p.then((res)=>console.log(res));
+
         } catch (err) {
             console.log(err);
             Obj.errMsg = err;
