@@ -168,5 +168,10 @@ module.exports = {
             console.log(err)
         }
         return this.base64Enc(JSON.stringify(arrFin));
+    },
+    reqTokenToUinfo(reqToken) {
+        const token = reqToken; // 클라이언트 요청 헤더의 토큰 추출 
+        const payload = JSON.parse(this.base64Dec(token.split('.')[1])); // 토큰의 payload(사용자 정보) 추출
+        return this.base64Dec(payload.uInfo).split(':');
     }
 }

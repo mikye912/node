@@ -5,19 +5,15 @@ const router = express.Router();
 
 router.route('/:reqUrl')
     .get((req, res) => {
-        const jsonObj = req.query;
-
-        const token = req.cookies.x_auth;
-        const payload = JSON.parse(common.base64Dec(token.split('.')[1]));
-        const uInfo = common.base64Dec(payload.uInfo).split(':');
-
-        jsonObj.uInfo = uInfo;
-        console.log(uInfo)
+        let obj = new Object();
         
-        dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, jsonObj, res).then(res.send.bind(res));
+        obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
+        
+        dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
     })
     .put((req, res) => {
         const jsonObj = req.body;
+        
         switch (req.params.reqUrl) {
             case 'setUserFav':
                 let arrSeq = new Array();
@@ -31,7 +27,7 @@ router.route('/:reqUrl')
                 })
                 sql += " ELSE null END "
                 seq = seq.concat(arrSeq.join("','"));
-                obj.userId = jsonObj.userId;
+                obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
                 obj.seq = seq;
                 obj.sort = jsonObj.right.length > 0 ? sql : sort;
                 dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));

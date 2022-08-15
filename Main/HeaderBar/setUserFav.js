@@ -20,7 +20,7 @@ async function run(oracledb, obj) {
             UPDATE TB_SYS_FAVORITE SET
             USE_YN=CASE WHEN PROGRAM_SEQ IN('${obj.seq}') THEN 'Y' ELSE 'N' END,
             SORT=${obj.sort}
-            WHERE user_id='${obj.userId}'
+            WHERE user_id='${obj.uInfo[0]}'
             `
             , [], options);
         let rst = result.rowsAffected;

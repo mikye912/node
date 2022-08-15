@@ -1,4 +1,5 @@
 module.exports = {
+    port          : 5000,
     secret        : "Gaon1309!",
     user          : process.env.NODE_ORACLEDB_USER || "IFOU",
     password      : process.env.NODE_ORACLEDB_PASSWORD || "1",

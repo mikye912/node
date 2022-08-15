@@ -13,7 +13,7 @@ async function run(oracledb, obj) {
     oracledb.autoCommit = true;
 
     let binds = {
-        orgcd: orgcd
+        orgcd: obj.uInfo[1]
     };
 
     let options = {

@@ -45,10 +45,12 @@ router.post('/AuthLogin', (req, res) => {
                         resolve(token) 
                     })
             })
-            await jwtSign.then((t)=>res.cookie("x_auth", t, {
-                maxAge: 1000 * 60 * 60 * 24 * 7,
-                httpOnly: true,
-            }));
+            // await jwtSign.then((t)=>res.cookie("x_auth", t, {
+            //     maxAge: 1000 * 60 * 60 * 24 * 7,
+            //     httpOnly: true,
+            // }));
+
+            await jwtSign.then((res)=>Obj.token = res);
 
         } catch (err) {
             console.log(err);

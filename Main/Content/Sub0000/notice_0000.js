@@ -1,6 +1,6 @@
 const config = require('$Common/config');
 
-async function run(oracledb, obj) {
+async function run(oracledb) {
   let connection;
 
   try {
