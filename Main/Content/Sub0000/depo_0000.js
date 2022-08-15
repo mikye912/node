@@ -38,7 +38,7 @@ async function run(oracledb, obj) {
             CASE WHEN RTN_CD = '67' THEN SUM(SALE_AMT) ELSE 0 END CSALE_AMT,
             CASE WHEN RTN_CD = '60' THEN SUM(FEE) ELSE 0 END AFEE,
             CASE WHEN RTN_CD = '67' THEN SUM(FEE) ELSE 0 END CFEE
-          FROM TB_MNG_DEPDATA_NICE
+          FROM ${obj.uInfo[6]}
           WHERE MID IN (SELECT MID FROM TB_BAS_MIDMAP WHERE ORG_CD=:orgcd) AND RTN_CD IN('60','67') AND EXP_DD=TO_CHAR(SYSDATE,'YYYYMMDD')
           GROUP BY RTN_CD
         )
