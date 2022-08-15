@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 router.post('/AuthLogin', (req, res) => {
-    // ! 세션 관리 로직 추가 필요
     let Obj = new Object();
     const jsonObj = req.body;
     const secret = req.app.get('jwt_secret');
@@ -30,7 +29,7 @@ router.post('/AuthLogin', (req, res) => {
                 Obj.uSearch = common.uSearch_base64(res[1], res[2], res[3], res[4]);
             });
 
-            const p = new Promise((resolve, reject) => {
+            const jwtSign = new Promise((resolve, reject) => {
                 jwt.sign(
                     {
                         uInfo : Obj.uInfo
@@ -40,11 +39,16 @@ router.post('/AuthLogin', (req, res) => {
                         expiresIn: '7d',
                         subject: 'uInfo'
                     }, (err, token) => {
-                        if (err) reject(err)
+                        if (err) {
+                            reject(err)
+                        }
                         resolve(token) 
                     })
             })
-            p.then((res)=>console.log(res));
+            await jwtSign.then((t)=>res.cookie("x_auth", t, {
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                httpOnly: true,
+            }));
 
         } catch (err) {
             console.log(err);

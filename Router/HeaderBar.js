@@ -1,10 +1,19 @@
 const dbconn = require('$Common/dbconn');
+const common = require('$Common/common');
 const express = require('express');
 const router = express.Router();
 
 router.route('/:reqUrl')
     .get((req, res) => {
         const jsonObj = req.query;
+
+        const token = req.cookies.x_auth;
+        const payload = JSON.parse(common.base64Dec(token.split('.')[1]));
+        const uInfo = common.base64Dec(payload.uInfo).split(':');
+
+        jsonObj.uInfo = uInfo;
+        console.log(uInfo)
+        
         dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, jsonObj, res).then(res.send.bind(res));
     })
     .put((req, res) => {

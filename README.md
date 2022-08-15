@@ -19,3 +19,7 @@
 ## jsonwebtoken
 ### 사용자 인증 시 토큰 발급, 토큰 검증으로 인한 사용자 검증
 -> npm install jsonwebtoken
+
+## cookie-parser
+### 요청 Header 쿠키 값 JSON Parse
+-> npm install cookie-parser

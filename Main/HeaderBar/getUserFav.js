@@ -3,6 +3,10 @@ const config = require('$Common/config');
 async function run(oracledb, obj) {
     let connection;
 
+    const binds = {
+        userId: obj.uInfo[0]
+    }
+
     try {
         connection = await oracledb.getConnection({
             user: config.user,
@@ -31,7 +35,7 @@ async function run(oracledb, obj) {
             WHERE USER_ID=:userId AND LENGTH(T1.PROGRAM_SEQ) > 2
             ORDER BY T2.SORT
             `
-            , obj, options);
+            , binds, options);
 
         let rst = result.rows;
         return rst;
