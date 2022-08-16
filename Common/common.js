@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 module.exports = {
     base64Enc(str) {
         return Buffer.from(str, "utf-8").toString('base64');
@@ -142,12 +144,12 @@ module.exports = {
                     if (uSearch[i].PAGE === uSearch[i + 1].PAGE) {
                         setJsonObj(uSearch[i]);
                         arrObj = [...arrObj, jsonObj];
-                    }else{
+                    } else {
                         setJsonObj(uSearch[i]);
                         arrObj = [...arrObj, jsonObj];
                         jsonFin = {};
                         jsonFin = {
-                            [uSearch[i].PAGE] : arrObj
+                            [uSearch[i].PAGE]: arrObj
                         };
                         arrFin = [...arrFin, jsonFin];
                         arrObj = [];
@@ -168,6 +170,20 @@ module.exports = {
             console.log(err)
         }
         return this.base64Enc(JSON.stringify(arrFin));
+    },
+    signToken(dataObj, secret, payloadObj) {
+        return new Promise((resolve, reject) => {
+            jwt.sign(
+                dataObj,
+                secret,
+                payloadObj,
+                (err, token) => {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(token)
+                })
+        })
     },
     reqTokenToUinfo(reqToken) {
         const token = reqToken; // 클라이언트 요청 헤더의 토큰 추출 

@@ -1,7 +1,6 @@
 const common = require('$Common/common');
 const dbconn = require('$Common/dbconn');
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 router.post('/AuthLogin', (req, res) => {
@@ -29,28 +28,19 @@ router.post('/AuthLogin', (req, res) => {
                 Obj.uSearch = common.uSearch_base64(res[1], res[2], res[3], res[4]);
             });
 
-            const jwtSign = new Promise((resolve, reject) => {
-                jwt.sign(
-                    {
-                        uInfo : Obj.uInfo
-                    }, 
-                    secret, 
-                    {
-                        expiresIn: '7d',
-                        subject: 'uInfo'
-                    }, (err, token) => {
-                        if (err) {
-                            reject(err)
-                        }
-                        resolve(token) 
-                    })
-            })
-            // await jwtSign.then((t)=>res.cookie("x_auth", t, {
-            //     maxAge: 1000 * 60 * 60 * 24 * 7,
-            //     httpOnly: true,
-            // }));
+            // 엑세스 토큰 발급
+            const accessToken = common.signToken(
+                {
+                uInfo : Obj.uInfo
+                }, 
+                secret, 
+                {
+                    expiresIn: '7d',
+                    subject: 'uInfo'
+                }
+            )
 
-            await jwtSign.then((res)=>Obj.token = res);
+            await accessToken.then((res)=>Obj.token = res);
 
         } catch (err) {
             console.log(err);
