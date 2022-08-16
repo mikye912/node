@@ -34,7 +34,7 @@ async function run(oracledb, obj) {
     LEFT OUTER JOIN (
       SELECT DEP_NM AS TITLE, DEP_CD FROM TB_BAS_DEPART WHERE ORG_CD=:orgCd ${whDepCd}
     ) T2 ON(T1.DEP_CD = T2.DEP_CD)
-    ORDER BY TITLE ASC
+    ORDER BY TITLE ASC, NAME ASC
     `
     
 
