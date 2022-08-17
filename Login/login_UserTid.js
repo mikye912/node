@@ -56,7 +56,7 @@ async function run(oracledb, obj) {
     result = await connection.execute(query, {orgCd : obj.MEMBER_ORG}, options);
     
     let rst = result.rows;
-    console.log(rst);
+
     return rst;
   } catch (err) {
     console.error(err);

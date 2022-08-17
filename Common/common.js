@@ -87,7 +87,247 @@ module.exports = {
                     jsonObj.SUBDATA = uDepart;
                     return;
                 case 'TID':
-                    jsonObj.SUBDATA = uTid;
+                    try{
+                    let arrRst = [];
+                    let arrTid = [];
+                    let objTid = {};
+                    for (i = 0; i < uTid.length; i++) {
+                        if (i !== uTid.length - 1) {
+                            if (uTid[i].TITLE === uTid[i + 1].TITLE) {
+                                objTid.TITLE = uTid[i].TITLE;
+                                let obj = {};
+                                obj.NAME = uTid[i].NAME;
+                                obj.VALUE = uTid[i].VALUE;
+                                arrTid = [...arrTid, obj];
+                            } else {
+                                objTid.TITLE = uTid[i].TITLE;
+                                let obj = {};
+                                obj.NAME = uTid[i].NAME;
+                                obj.VALUE = uTid[i].VALUE;
+                                arrTid = [...arrTid, obj];
+                                objTid.TID = arrTid;
+                                arrTid = [];
+                                arrRst = [...arrRst, objTid];
+                                objTid = {};
+                            }
+                        } else {
+                            objTid.TITLE = uTid[i].TITLE;
+                            let obj = {};
+                            obj.NAME = uTid[i].NAME;
+                            obj.VALUE = uTid[i].VALUE;
+                            arrTid = [...arrTid, obj];
+                            objTid.TID = arrTid;
+                            arrTid = [];
+                            arrRst = [...arrRst, objTid];
+                            objTid = {};
+                        }
+                    }
+                    jsonObj.SUBDATA = arrRst;
+                }catch(err){
+                    console.log(err);
+                }
+                    // jsonObj.SUBDATA = [
+                    //     {
+                    //         "TITLE": "가온병원_원무",
+                    //         "TID": [
+                    //             {
+                    //                 "NAME": "모바일_SSG페이(KIS)",
+                    //                 "VALUE": "39219973"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_메디블록(KIS)",
+                    //                 "VALUE": "39259586"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_무인수납(KIS)",
+                    //                 "VALUE": "39219244"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_복지관(KIS)",
+                    //                 "VALUE": "39219246"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_본원(KIS)",
+                    //                 "VALUE": "39219264"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_본원2(KIS)",
+                    //                 "VALUE": "39219243"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_삼성페이(KIS)",
+                    //                 "VALUE": "39219383"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_암센터(KIS)",
+                    //                 "VALUE": "39219245"
+                    //             },
+                    //             {
+                    //                 "NAME": "모 바일_의무기록발급(KIS)",
+                    //                 "VALUE": "39248951"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_일반(KIS)",
+                    //                 "VALUE": "39229543"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_입원비중간(KIS)",
+                    //                 "VALUE": "39248952"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_제증명발급(KIS)",
+                    //                 "VALUE": "39229542"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_진료비WEB(KIS)",
+                    //                 "VALUE": "39259488"
+                    //             },
+                    //             {
+                    //                 "NAME": "무인수납(NICE)",
+                    //                 "VALUE": "8102002001"
+                    //             },
+                    //             {
+                    //                 "NAME": "무인수납(금결원)",
+                    //                 "VALUE": "904430"
+                    //             },
+                    //             {
+                    //                 "NAME": "본원(NICE)",
+                    //                 "VALUE": "8102001002"
+                    //             },
+                    //             {
+                    //                 "NAME": "본원(NICE)",
+                    //                 "VALUE": "8102001001"
+                    //             },
+                    //             {
+                    //                 "NAME": "본원(금결원)",
+                    //                 "VALUE": "904420"
+                    //             },
+                    //             {
+                    //                 "NAME": "본원, 무인수납(KICC)",
+                    //                 "VALUE": "0407804"
+                    //             },
+                    //             {
+                    //                 "NAME": "암센터(KICC)",
+                    //                 "VALUE": "0370000"
+                    //             },
+                    //             {
+                    //                 "NAME": "암센터(NICE)",
+                    //                 "VALUE": "8102003001"
+                    //             },
+                    //             {
+                    //                 "NAME": "암센터(금결원)",
+                    //                 "VALUE": "904450"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장(NICE)",
+                    //                 "VALUE": "8102004001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장(금결원)",
+                    //                 "VALUE": "904460"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_그레이스플로라",
+                    //                 "VALUE": "8102015001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_대한운수",
+                    //                 "VALUE": "8102013001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_마트24시",
+                    //                 "VALUE": "8102008001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_미림식품",
+                    //                 "VALUE": "8102007001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_삼포실버드림",
+                    //                 "VALUE": "8102010001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_새서울캐딜 락",
+                    //                 "VALUE": "8102012001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_아펙스넷",
+                    //                 "VALUE": "8102014001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_영광토탈써비스",
+                    //                 "VALUE": "8102009001"
+                    //             },
+                    //             {
+                    //                 "NAME": "장례식장_일원BMS",
+                    //                 "VALUE": "8102011001"
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "TITLE": "가온병원_이마트",
+                    //         "TID": [
+                    //             {
+                    //                 "NAME": "모바일_주차장01",
+                    //                 "VALUE": "39262048"
+                    //             },
+                    //             {
+                    //                 "NAME": "주차장(NICE)",
+                    //                 "VALUE": "8102006001"
+                    //             },
+                    //             {
+                    //                 "NAME": "주차장(금결원)",
+                    //                 "VALUE": "904440"
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "TITLE": "가온병원_장례식장",
+                    //         "TID": [
+                    //             {
+                    //                 "NAME": "모바일_직원용(KIS)",
+                    //                 "VALUE": "39219247"
+                    //             },
+                    //             {
+                    //                 "NAME": "직원용(KICC)",
+                    //                 "VALUE": "6740460"
+                    //             },
+                    //             {
+                    //                 "NAME": "직원용(NICE)",
+                    //                 "VALUE": "9109910001"
+                    //             },
+                    //             {
+                    //                 "NAME": "직원용(금결원)",
+                    //                 "VALUE": "904500"
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "TITLE": "가온병원_주차장",
+                    //         "TID": [
+                    //             {
+                    //                 "NAME": "검진센터(KICC)",
+                    //                 "VALUE": "6740446"
+                    //             },
+                    //             {
+                    //                 "NAME": "검진센터(NICE)",
+                    //                 "VALUE": "8102005002"
+                    //             },
+                    //             {
+                    //                 "NAME": "검진센터(NICE)",
+                    //                 "VALUE": "8102005001"
+                    //             },
+                    //             {
+                    //                 "NAME": "검진센터(금결원)",
+                    //                 "VALUE": "904490"
+                    //             },
+                    //             {
+                    //                 "NAME": "모바일_검진센터(KIS)",
+                    //                 "VALUE": "39219248"
+                    //             }
+                    //         ]
+                    //     }
+                    // ];
                     return;
                 case 'APPGB':
                     jsonObj.SUBDATA = [
@@ -137,13 +377,19 @@ module.exports = {
             jsonObj.DEFAULT_YN = obj.DEFAULT_YN;
             jsonObj.SORT = obj.SORT;
             setSubData(obj.FIELD);
+            console.log(jsonObj)
         }
         try {
             for (i = 0; i < uSearch.length; i++) {
+                //console.log(uSearch.length)
+                //console.log(uSearch[i].PAGE)
                 if (i !== uSearch.length - 1) {
+                    //console.log(uSearch[i].PAGE)
                     if (uSearch[i].PAGE === uSearch[i + 1].PAGE) {
+                        //console.log(i);
                         setJsonObj(uSearch[i]);
                         arrObj = [...arrObj, jsonObj];
+                        //console.log(JSON.stringify(arrObj))
                     } else {
                         setJsonObj(uSearch[i]);
                         arrObj = [...arrObj, jsonObj];
@@ -155,6 +401,7 @@ module.exports = {
                         arrObj = [];
                     }
                 } else {
+                    //console.log(uSearch[i].PAGE)
                     setJsonObj(uSearch[i]);
                     arrObj = [...arrObj, jsonObj];
                     jsonFin = {};
@@ -167,7 +414,7 @@ module.exports = {
             }
             //console.log("test", JSON.stringify(arrFin))
         } catch (err) {
-            console.log(err)
+            console.log("err")
         }
         return this.base64Enc(JSON.stringify(arrFin));
     },
