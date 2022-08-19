@@ -11,10 +11,9 @@ module.exports = {
         const toStr = Object.values(arrObj[0]).join(':');
         return this.base64Enc(toStr);
     },
-    uMenu_base64(arrObj) {
+    uMenu_trans(arrObj) {
         let arrMenu = new Array();
         let jsonObj = {};
-
         arrObj.map(( crr, i, arrObj ) => {
             let arrSubMenu = new Array();
             if (arrObj[i].MENU_DEPTH == 0) {
@@ -42,7 +41,7 @@ module.exports = {
                 arrMenu = [...arrMenu, jsonObj];
             }
         })
-        return this.base64Enc(JSON.stringify(arrMenu));
+        return JSON.stringify(arrMenu);
     },
     uSearch_base64(uSearch, uDepart, uTid, uAcq) {
         let arrFin = new Array();

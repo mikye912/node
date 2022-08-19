@@ -6,6 +6,7 @@ const app = express();
 const authMiddleware = require('./MiddleWare/jwtAuth');
 const LoginRouter = require('./Router/Login');
 const HeaderBarRouter = require('./Router/HeaderBar');
+const SidebarRouter = require('./Router/Sidebar');
 const ContentRouter = require('./Router/Content');
 
 app.listen(config.port, () => {
@@ -20,4 +21,5 @@ app.use('/Login', LoginRouter);
 
 app.use('/Main', authMiddleware); // 해당 URL로 시작하는 모든 요청 시, 토큰 검증 진행
 app.use('/Main/HeaderBar', HeaderBarRouter);
+app.use('/Main/Sidebar', SidebarRouter);
 app.use('/Main/Content', ContentRouter);

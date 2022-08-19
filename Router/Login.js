@@ -16,7 +16,6 @@ router.post('/AuthLogin', (req, res) => {
                 throw getUinfo.errMsg;
             }
             let arr = new Array();
-            arr = [...arr, dbconn.createPromise('$Login/login_UserMenu',getUinfo[0])];
             arr = [...arr, dbconn.createPromise('$Login/login_SearchBox',getUinfo[0])];
             arr = [...arr, dbconn.createPromise('$Login/login_UserDepart',getUinfo[0])];
             arr = [...arr, dbconn.createPromise('$Login/login_UserTid',getUinfo[0])];
@@ -24,8 +23,7 @@ router.post('/AuthLogin', (req, res) => {
 
             await dbconn.getDataAll(arr).then((res) => {
                 Obj.uInfo = common.uInfo_base64(getUinfo);
-                Obj.uMenu = common.uMenu_base64(res[0]);
-                Obj.uSearch = common.uSearch_base64(res[1], res[2], res[3], res[4]);
+                Obj.uSearch = common.uSearch_base64(res[0], res[1], res[2], res[3]);
             });
 
             // 엑세스 토큰 발급
