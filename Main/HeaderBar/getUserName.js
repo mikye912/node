@@ -1,6 +1,6 @@
 const config = require('$Common/config');
 
-async function run(oracledb, obj) {
+async function run(oracledb, obj, res) {
   let connection;
 
   const binds = {
@@ -34,6 +34,9 @@ async function run(oracledb, obj) {
     return rst;
   } catch (err) {
     console.error(err);
+    res.status(500).json({
+      dbErr : err
+    })
   } finally {
     if (connection) {
       try {

@@ -24,9 +24,12 @@ async function run(oracledb, obj) {
             `
             , [], options);
         let rst = result.rowsAffected;
-        return {rst : rst};
+        return { rst: rst };
     } catch (err) {
         console.error(err);
+        res.status(500).json({
+            dbErr: err
+        })
     } finally {
         if (connection) {
             try {
