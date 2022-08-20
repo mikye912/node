@@ -43,7 +43,7 @@ module.exports = {
         })
         return JSON.stringify(arrMenu);
     },
-    uSearch_base64(uSearch, uDepart, uTid, uAcq) {
+    uSearch_trans(uSearch, uDepart, uTid, uAcq) {
         let arrFin = new Array();
         let jsonFin = new Object();
         let arrObj = new Array();
@@ -202,7 +202,7 @@ module.exports = {
         } catch (err) {
             console.log(err)
         }
-        return this.base64Enc(JSON.stringify(arrFin));
+        return JSON.stringify(arrFin);
     },
     signToken(dataObj, secret, payloadObj) {
         return new Promise((resolve, reject) => {

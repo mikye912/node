@@ -16,12 +16,11 @@ router.route('/getUserSearch')
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid',obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
 
-            const uSearch = await dbconn.getDataAll(arr).then((res) => {
-                return common.uSearch_base64(res[0], res[1], res[2], res[3]);
+            return await dbconn.getDataAll(arr).then((res) => {
+                return common.uSearch_trans(res[0], res[1], res[2], res[3]);
             });
         }
-        getSearch();
-        //getSearch().then(res.send.bind(res));
+        getSearch().then(res.send.bind(res));
     })
 
 router.route('/Sub0000/:reqUrl')

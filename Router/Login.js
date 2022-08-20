@@ -15,21 +15,12 @@ router.post('/AuthLogin', (req, res) => {
             if (key == "errMsg") {
                 throw getUinfo.errMsg;
             }
-            let arr = new Array();
-            arr = [...arr, dbconn.createPromise('$Login/login_SearchBox',getUinfo[0])];
-            arr = [...arr, dbconn.createPromise('$Login/login_UserDepart',getUinfo[0])];
-            arr = [...arr, dbconn.createPromise('$Login/login_UserTid',getUinfo[0])];
-            arr = [...arr, dbconn.createPromise('$Login/login_UserAcq')];
-
-            await dbconn.getDataAll(arr).then((res) => {
-                Obj.uInfo = common.uInfo_base64(getUinfo);
-                Obj.uSearch = common.uSearch_base64(res[0], res[1], res[2], res[3]);
-            });
+            const uInfo = common.uInfo_base64(getUinfo);
 
             // 엑세스 토큰 발급
             const accessToken = common.signToken(
                 {
-                uInfo : Obj.uInfo
+                uInfo : uInfo
                 }, 
                 secret, 
                 {
