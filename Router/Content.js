@@ -6,14 +6,14 @@ const router = express.Router();
 router.route('/getUserSearch')
     .get((req, res) => {
         let obj = new Object();
-        
+
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
-        
+
         const getSearch = async () => {
             let arr = new Array();
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
-            arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid',obj)];
+            arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
 
             return await dbconn.getDataAll(arr).then((res) => {
@@ -41,5 +41,15 @@ router.route('/Sub0000/:reqUrl')
 
         dbconn.getData(`$Main/Content/Sub0000/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
     })
-    
+
+router.route('/Sub0201/:reqUrl')
+    .post((req, res) => {
+        let obj = new Object();
+
+        obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
+        console.log(`${req.params.reqUrl} => ${req.body}`)
+        res.send('아직 미구현');
+        //dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+    })
+
 module.exports = router;
