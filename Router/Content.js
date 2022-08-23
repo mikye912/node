@@ -45,9 +45,16 @@ router.route('/Sub0000/:reqUrl')
 router.route('/Sub0201/:reqUrl')
     .post((req, res) => {
         let obj = new Object();
-
+        
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
-        console.log(`${req.params.reqUrl} => ${req.body}`)
+
+        if(!common.isEmptyObj(req.body.where)){
+            console.log(req.body.where)
+        }else{
+            console.log('빈 객체');
+        }
+        
+        //console.log(`${req.params.reqUrl} \n => ${JSON.stringify(req.body.where)}`)
         //res.send('아직 미구현');
         /*
         {

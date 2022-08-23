@@ -1,20 +1,51 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
+    /**
+     * Object가 빈 객체인지 체크 하는 함수
+     * @param {Object} obj Object 타입의 객체
+     * @returns 빈 객체이면 true, 아니면 false 반환
+     */
+    isEmptyObj(obj) {
+        if (obj.constructor === Object && Object.keys(obj).length === 0) {
+            return true;
+        }
+        return false;
+    },
+    /**
+     * 문자열을 base64로 암호화 하는 함수
+     * @param {String} str 문자열 타입
+     * @returns 암호화된 문자열 반환
+     */
     base64Enc(str) {
         return Buffer.from(str, "utf-8").toString('base64');
     },
+    /**
+     * base64로 암호화된 문자열을 복호화 하는 함수
+     * @param {String} str 문자열 타입
+     * @returns 복호화된 문자열 반환
+     */
     base64Dec(str) {
         return Buffer.from(str, "base64").toString('utf-8');
     },
+    /**
+     * 사용자 정보를 가지고있는 Array 객체를 ':' 구분자로 합쳐 base64 로 암호화 하는 함수
+     * @param {Array} arrObj Array 타입의 객체
+     * @returns 암호화된 문자열 반환
+     */
     uInfo_base64(arrObj) {
         const toStr = Object.values(arrObj[0]).join(':');
         return this.base64Enc(toStr);
     },
+    /**
+     * 사용자의 메뉴를 가지고있는 Array 객체를 클라이언트에 맞는 Array 객체로 바꾸어 문자열로 변환하는 함수
+     * @param {Array} arrObj Array 타입의 객체
+     * @returns Array 형태인 문자열(JSON.stringify()) 을 반환
+     */
     uMenu_trans(arrObj) {
         let arrMenu = new Array();
         let jsonObj = {};
-        arrObj.map(( crr, i, arrObj ) => {
+        arrObj.map((crr, i, arrObj) => {
             let arrSubMenu = new Array();
             if (arrObj[i].MENU_DEPTH == 0) {
                 jsonObj = {};
@@ -22,7 +53,7 @@ module.exports = {
                 jsonObj.name = arrObj[i].MENU_NAME;
                 jsonObj.seq = arrObj[i].MENU_SEQ;
             }
-            arrObj.map(( crr, k, arrObj ) => {
+            arrObj.map((crr, k, arrObj) => {
                 if (arrObj[i].MENU_SEQ == arrObj[k].PARENT_SEQ) {
                     if (arrObj[i].AUTH_R == 'Y') {
                         let jsonSubObj = {};
@@ -43,11 +74,20 @@ module.exports = {
         })
         return JSON.stringify(arrMenu);
     },
+    /**
+     * 각 가맹점에 맞는 검색조건을 클라이언트에 맞는 Array 객체로 바꾸어 문자열로 변환하는 함수
+     * @param {Array} uSearch 각 페이지의 검색조건을 담은 Array 타입의 객체
+     * @param {Array} uDepart 각 가맹점의 사업부 정보를 담은 Array 타입의 객체
+     * @param {Array} uTid 각 가맹점의 단말기 정보를 담은 Array 타입의 객체
+     * @param {Array} uAcq 각 가맹점의 카드사 정보를 담은 Array 타입의 객체
+     * @returns Array 형태인 문자열(JSON.stringify()) 을 반환
+     */
     uSearch_trans(uSearch, uDepart, uTid, uAcq) {
         let arrFin = new Array();
         let jsonFin = new Object();
         let arrObj = new Array();
         let jsonObj = new Object();
+
         const setSubData = (str) => {
             switch (str) {
                 case 'ACQ_CD':
@@ -172,7 +212,7 @@ module.exports = {
             setSubData(obj.FIELD);
         }
         try {
-            uSearch.map(( crr, i, uSearch )=>{
+            uSearch.map((crr, i, uSearch) => {
                 if (i !== uSearch.length - 1) {
                     if (uSearch[i].PAGE === uSearch[i + 1].PAGE) {
                         setJsonObj(uSearch[i]);
@@ -204,6 +244,13 @@ module.exports = {
         }
         return JSON.stringify(arrFin);
     },
+    /**
+     * JsonWebToken 을 발급해주는 Promise 객체를 담은 함수
+     * @param {Object} dataObj 사용자 정보를 담은 Object 타입의 객체
+     * @param {String} secret 토큰 검증 시 필요한 secret 키를 담은 문자열 타입
+     * @param {Object} payloadObj JWT의 옵션을 담은 Object 타입의 객체
+     * @returns Promise 객체의 결과인 resolve, reject 반환
+     */
     signToken(dataObj, secret, payloadObj) {
         return new Promise((resolve, reject) => {
             jwt.sign(
@@ -218,6 +265,11 @@ module.exports = {
                 })
         })
     },
+    /**
+     * API 요청 받을 시 헤더로부터 받은 토큰의 사용자정보를 ':' 구분자로 나누어 주는 함수
+     * @param {String} reqToken JWT 정보를 담은 문자열 타입
+     * @returns Array 객체 반환
+     */
     reqTokenToUinfo(reqToken) {
         const token = reqToken; // 클라이언트 요청 헤더의 토큰 추출 
         const payload = JSON.parse(this.base64Dec(token.split('.')[1])); // 토큰의 payload(사용자 정보) 추출
