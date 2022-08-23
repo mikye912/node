@@ -19,63 +19,84 @@ async function run(oracledb, obj) {
     };
     let query = `
     SELECT
-        DEP_NM
-        ,TERM_ID
+        --DEP_NM
+        --,TERM_ID
+		    ROWNUM
         ,TERM_NM
-        ,ACNT
-        ,CCNT
-        ,AAMT
-        ,CAMT
         ,TOTCNT
         ,TOTAMT
-        ,BC
-        ,NH
+        ,ACNT
+        ,AAMT
+        ,CCNT
+        ,CAMT
         ,KB
-        ,SS
-        ,HN
+        ,NH
         ,LO
-        ,HD
+        ,BC
+        ,SS
         ,SI
+        ,HN
+        ,HD
+        ,RP
+        ,AP
+        ,WP
+        ,ZP
+        ,KP
     FROM(    
         SELECT
             TID
-            ,SUM(ACNT) ACNT
-            ,SUM(CCNT) CCNT
-            ,SUM(AAMT) AAMT
-            ,SUM(CAMT) CAMT
             ,SUM(ACNT)+SUM(CCNT) TOTCNT
             ,SUM(AAMT)-SUM(CAMT) TOTAMT
-            ,SUM(ABC  )-SUM(CBC  ) BC
-            ,SUM(ANH  )-SUM(CNH  ) NH
-            ,SUM(AKB  )-SUM(CKB  ) KB
-            ,SUM(ASS  )-SUM(CSS  ) SS
-            ,SUM(AHN  )-SUM(CHN  ) HN
-            ,SUM(ALO  )-SUM(CLO  ) LO
-            ,SUM(AHD  )-SUM(CHD  ) HD
-            ,SUM(ASI  )-SUM(CSI  ) SI
+            ,SUM(ACNT) ACNT
+            ,SUM(AAMT) AAMT
+            ,SUM(CCNT) CCNT
+            ,SUM(CAMT) CAMT
+            ,SUM(AKB)-SUM(CKB) KB
+            ,SUM(ANH)-SUM(CNH) NH
+            ,SUM(ALO)-SUM(CLO) LO
+            ,SUM(ABC)-SUM(CBC) BC
+            ,SUM(ASS)-SUM(CSS) SS
+            ,SUM(ASI)-SUM(CSI) SI
+            ,SUM(AHN)-SUM(CHN) HN
+            ,SUM(AHD)-SUM(CHD) HD
+            ,SUM(ARP)-SUM(CRP) RP
+            ,SUM(AAP)-SUM(CAP) AP
+            ,SUM(AWP)-SUM(CWP) WP
+            ,SUM(AZP)-SUM(CZP) ZP
+            ,SUM(AKP)-SUM(CKP) KP
         FROM(    
             SELECT
                 TID
                 ,CASE WHEN APPGB='A' THEN COUNT(1) ELSE 0 END ACNT
-                ,CASE WHEN APPGB='C' THEN COUNT(1) ELSE 0 END CCNT
                 ,CASE WHEN APPGB='A' THEN SUM(AMOUNT) ELSE 0 END AAMT
+                ,CASE WHEN APPGB='C' THEN COUNT(1) ELSE 0 END CCNT
                 ,CASE WHEN APPGB='C' THEN SUM(AMOUNT) ELSE 0 END CAMT
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END ABC
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END ANH
                 ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0001', '016', '02') THEN SUM(AMOUNT) ELSE 0 END AKB
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END ASS
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END AHN
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0003', '047', '33') THEN SUM(AMOUNT) ELSE 0 END ALO
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AHD
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0007', '029', '07') THEN SUM(AMOUNT) ELSE 0 END ASI
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END CBC
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END CNH
                 ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0001', '016', '02') THEN SUM(AMOUNT) ELSE 0 END CKB
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END CSS
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END CHN
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END ANH
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END CNH
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0003', '047', '33') THEN SUM(AMOUNT) ELSE 0 END ALO
                 ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0003', '047', '33') THEN SUM(AMOUNT) ELSE 0 END CLO
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CHD
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END ABC
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END CBC
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END ASS
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END CSS
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0007', '029', '07') THEN SUM(AMOUNT) ELSE 0 END ASI
                 ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0007', '029', '07') THEN SUM(AMOUNT) ELSE 0 END CSI
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END AHN
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END CHN
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AHD
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CHD
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END ARP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CRP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AAP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CAP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AWP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CWP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AZP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CZP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AKP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CKP
             FROM (
                 SELECT
                 SEQNO, DEP_NM, TERM_NM, TID, MID, PUR_NM, ACQ_CD, 
