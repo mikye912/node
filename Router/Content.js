@@ -48,8 +48,41 @@ router.route('/Sub0201/:reqUrl')
 
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
         console.log(`${req.params.reqUrl} => ${req.body}`)
-        res.send('아직 미구현');
-        //dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+        //res.send('아직 미구현');
+        /*
+        {
+            "APPNO": "22074616",
+            "ADD_CID": "3570526",
+            "ADD_CASHER": "K032",
+            "SAMOUNT": "0",
+            "EAMOUNT": "1300",
+            "CARDNO": "12345678901234",
+            "MID": "72209332",
+            "ADD_CD": "FC",
+            "ADD_GB": "O",
+            "SDATE": "20220823",
+            "EDATE": "20220823",
+            "ACQ_CD": "VC0030,12",
+            "CHECK_CARD": "Y",
+            "OVSEA_CARD": "N",
+            "DEP_CD": [
+                "MD1599704551",
+                "MD1603168055"
+            ],
+            "TID": [
+                "0370000",
+                "8102004001",
+                "8102013001"
+            ],
+            "APPGB": [
+                "A"
+            ],
+            "AUTHSTAT": [
+                "정상거래"
+            ]
+        }
+        */
+        dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
     })
 
 module.exports = router;
