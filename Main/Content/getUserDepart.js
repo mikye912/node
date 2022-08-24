@@ -3,8 +3,8 @@ const config = require('$Common/config');
 async function run(oracledb, obj) {
   let connection;
 
-  let whDepCd = obj.MEMBER_DEPO ? ` AND DEP_CD = '${obj.MEMBER_DEPO}' ` : ``;
-
+  let whDepCd = obj.uInfo[2] ? ` AND DEP_CD = '${obj.uInfo[2]}' ` : ``;
+  
   try {
     connection = await oracledb.getConnection({
       user: config.user,

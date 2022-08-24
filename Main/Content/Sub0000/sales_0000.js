@@ -2,7 +2,6 @@ const config = require('$Common/config');
 
 async function run(oracledb, obj) {
   let connection;
-  let orgcd = obj.orgcd;
 
   try {
     connection = await oracledb.getConnection({

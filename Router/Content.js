@@ -49,7 +49,8 @@ router.route('/Sub0201/:reqUrl')
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
         if(!common.isEmptyObj(req.body.where)){
-            console.log(req.body.where)
+            obj.where = req.body.where;
+            console.log(obj.where);
         }else{
             console.log('빈 객체');
         }

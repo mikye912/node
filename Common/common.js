@@ -1,6 +1,21 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
+    regReplace(str) {
+        const reg = /[^\w\sㄱ-힣]|[\_]/g;
+        return str.replace(reg, ``);
+    },
+    /**
+     * Array가 빈 객체인지 체크 하는 함수
+     * @param {*} arr Array 타입의 객체
+     * @returns 빈 객체이면 true, 아니면 false 반환
+     */
+    isEmptyArr(arr) {
+        if (Array.isArray(arr) && arr.length === 0) {
+            return true;
+        }
+        return false;
+    },
     /**
      * Object가 빈 객체인지 체크 하는 함수
      * @param {Object} obj Object 타입의 객체
