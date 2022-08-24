@@ -6,18 +6,18 @@ async function run(oracledb, obj, res) {
   //let userPw = obj.userPw;
   let userPw = Buffer.from(obj.userPw, "base64").toString('utf8');
   let rstMsg = new Array();
-  let userAuthTXT = [{
-    MEMBER_LOGIN_SESSION: userId,
-    MEMBER_ORG: "",
-    MEMBER_DEPO: "",
-    MKTIME: new Date().getTime() / 1000,
-    PTAB: "",
-    VTAB: "",
-    DTAB: "",
-    USER_LV: "",
-    AUTH_SEQ: "",
-    TRANS_NO: ""
-  }]
+  // let userAuthTXT = [{
+  //   MEMBER_LOGIN_SESSION: userId,
+  //   MEMBER_ORG: "",
+  //   MEMBER_DEPO: "",
+  //   MKTIME: new Date().getTime() / 1000,
+  //   PTAB: "",
+  //   VTAB: "",
+  //   DTAB: "",
+  //   USER_LV: "",
+  //   AUTH_SEQ: "",
+  //   TRANS_NO: ""
+  // }]
 
   try {
     connection = await oracledb.getConnection({

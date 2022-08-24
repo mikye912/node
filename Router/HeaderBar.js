@@ -6,7 +6,7 @@ const router = express.Router();
 router.route('/:reqUrl')
     .get((req, res) => {
         let obj = new Object();
-        
+        console.log(common.nowDate.fullDate());
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
         
         dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
