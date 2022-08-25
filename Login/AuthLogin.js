@@ -6,18 +6,6 @@ async function run(oracledb, obj, res) {
   //let userPw = obj.userPw;
   let userPw = Buffer.from(obj.userPw, "base64").toString('utf8');
   let rstMsg = new Array();
-  // let userAuthTXT = [{
-  //   MEMBER_LOGIN_SESSION: userId,
-  //   MEMBER_ORG: "",
-  //   MEMBER_DEPO: "",
-  //   MKTIME: new Date().getTime() / 1000,
-  //   PTAB: "",
-  //   VTAB: "",
-  //   DTAB: "",
-  //   USER_LV: "",
-  //   AUTH_SEQ: "",
-  //   TRANS_NO: ""
-  // }]
 
   try {
     connection = await oracledb.getConnection({
@@ -70,7 +58,7 @@ async function run(oracledb, obj, res) {
     let rst = result.rows;
     if (rst[0]) {
       if (rst[0].USE_CHK == "9") {
-        throw {errMsg: '계정이 잠겼습니다. 관리자에게 문의주세요.'};
+        throw { errMsg: '계정이 잠겼습니다. 관리자에게 문의주세요.' };
       } else if (rst[0].USER_PW != userPw) {
         result = await connection.execute(
           `
@@ -87,8 +75,8 @@ async function run(oracledb, obj, res) {
 
         let rst = result.rowsAffected;
         console.log('Rows Update : ' + rst);
-        throw {errMsg: '비밀번호를 확인하여 주십시오.'};
-      }else{
+        throw { errMsg: '비밀번호를 확인하여 주십시오.' };
+      } else {
         let jsonObj = new Object();
 
         jsonObj.MEMBER_LOGIN_SESSION = rst[0].USER_ID;
@@ -104,9 +92,9 @@ async function run(oracledb, obj, res) {
         rstMsg = [...rstMsg, jsonObj];
       }
     } else {
-      throw {errMsg: '아이디를 확인하여 주십시오.'};
+      throw { errMsg: '아이디를 확인하여 주십시오.' };
     }
-      return rstMsg;
+    return rstMsg;
     //let userEnc = Buffer.from(userTXT, "utf8").toString('base64');
     //console.log(userEnc);
   } catch (err) {

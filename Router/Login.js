@@ -30,10 +30,13 @@ router.post('/AuthLogin', (req, res) => {
             )
 
             await accessToken
-            .then((res) => Obj.token = res)
+            .then((res) => {
+                Obj.token = res;
+                dbconn.getData('$Login/setUserLog',jsonObj);
+            })
             .catch(() => {throw "signToken Error"});
             
-            dbconn.getData('$Login/setSeqno',jsonObj, res).then((res) => console.log(res));
+            
             
 
         } catch (err) {
