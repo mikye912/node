@@ -86,7 +86,7 @@ async function run(oracledb, obj, res) {
           , binds, options);
 
         let rst = result.rowsAffected;
-        console.log('Rows Insert : ' + rst);
+        console.log('Rows Update : ' + rst);
         throw {errMsg: '비밀번호를 확인하여 주십시오.'};
       }else{
         let jsonObj = new Object();
