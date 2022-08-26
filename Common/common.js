@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
+    /**
+     * 문자열에서 특수문자 제거 하는 함수
+     * @param {String} str 문자열 타입
+     * @returns 특수문자 제거 한 문자열 을 반환
+     */
     regReplace(str) {
         const reg = /[^\w\sㄱ-힣]|[\_]/g;
         return str.replace(reg, ``);
