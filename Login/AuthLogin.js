@@ -3,8 +3,7 @@ const config = require('$Common/config');
 async function run(oracledb, obj, res) {
   let connection;
   let userId = obj.userId;
-  //let userPw = obj.userPw;
-  let userPw = Buffer.from(obj.userPw, "base64").toString('utf8');
+  let userPw = obj.userPw;
   let rstMsg = new Array();
 
   try {

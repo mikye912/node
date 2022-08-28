@@ -1,8 +1,8 @@
 const common = require('$Common/common');
 const dbconn = require('$Common/dbconn');
+const socket = require('$Common/socket');
 const express = require('express');
 const router = express.Router();
-const net = require('net');
 
 router.post('/AuthLogin', (req, res) => {
     let Obj = new Object();
@@ -57,21 +57,14 @@ router.post('/AuthLogin', (req, res) => {
                 trData += "2000";
                 trData += "1116";
                 trData += obj.USER_ID.padEnd(12, " ");
-                console.log(trData)
-                const socket = net.connect({
-                    port: '21150',
-                    host: "192.168.0.174"
-                });
+                console.log(trData);
                 
-                socket.setEncoding('utf-8');
-                socket.on('connect', () => {
-                    console.log('on connect');
-                    
-                    socket.write(trData);
-                })
-                socket.on('end', () => {
-                    console.log('END')
-                })
+                const authSocket = socket.getConnection('authSocket', {
+                    port: '5000',
+                    host: "localhost"
+                }).
+                socket.writeData(authSocket,trData);
+
             })
             .catch(() => {throw "signToken Error"});
         } catch (err) {
