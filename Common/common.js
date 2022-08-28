@@ -339,7 +339,7 @@ module.exports = {
             let hours = new Date(data);
             hours = hours.getHours();
 
-            return hours;
+            return hours.toString().padStart(2,'0');
         },
         minutes: (num = 0) => {
             // return new Date().getMinutes() + (num);
@@ -349,7 +349,7 @@ module.exports = {
             let minutes = new Date(data);
             minutes = minutes.getMinutes();
 
-            return minutes;
+            return minutes.toString().padStart(2,'0');
         },
         seconds: (num = 0) => {
             // return new Date().getSeconds() + (num);
@@ -359,7 +359,7 @@ module.exports = {
             let seconds = new Date(data);
             seconds = seconds.getSeconds();
 
-            return seconds;
+            return seconds.toString().padStart(2,'0');
         }
     },
 }
