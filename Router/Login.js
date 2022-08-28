@@ -8,7 +8,7 @@ router.post('/AuthLogin', (req, res) => {
     let Obj = new Object();
     const jsonObj = req.body;
     const secret = req.app.get('jwt_secret');
-    async function userINFO() {
+    const userINFO = async () => {
         try { 
             const getUinfo = await dbconn.getData('$Login/AuthLogin',jsonObj, res);
 
@@ -60,9 +60,9 @@ router.post('/AuthLogin', (req, res) => {
                 console.log(trData);
                 
                 const authSocket = socket.getConnection('authSocket', {
-                    port: '5000',
-                    host: "localhost"
-                }).
+                    port: '5000',      // ! 차후 운영 반영시 변경
+                    host: "localhost"  // ! 차후 운영 반영시 변경
+                })
                 socket.writeData(authSocket,trData);
 
             })
