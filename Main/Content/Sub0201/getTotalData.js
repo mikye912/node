@@ -166,7 +166,7 @@ async function run(oracledb, obj) {
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
-    // TODO 쿼리에 ACQ_CD IN() 수정하기
+    // TODO 쿼리에 지역화폐, 카카오페이 추가하기
     let query = `
     SELECT
         --DEP_NM
@@ -237,16 +237,16 @@ async function run(oracledb, obj) {
                 ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END CHN
                 ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AHD
                 ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CHD
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END ARP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CRP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AAP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CAP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AWP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CWP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AZP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CZP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AKP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CKP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END ARP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END CRP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0010', '0003') THEN SUM(AMOUNT) ELSE 0 END AAP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0010', '0003') THEN SUM(AMOUNT) ELSE 0 END CAP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0012', '0009') THEN SUM(AMOUNT) ELSE 0 END AWP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0012', '0009') THEN SUM(AMOUNT) ELSE 0 END CWP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0083', '9999') THEN SUM(AMOUNT) ELSE 0 END AZP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0083', '9999') THEN SUM(AMOUNT) ELSE 0 END CZP
+                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END AKP
+                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END CKP
             FROM (
                 SELECT
                 SEQNO, DEP_NM, TERM_NM, TID, MID, PUR_NM, ACQ_CD, 
