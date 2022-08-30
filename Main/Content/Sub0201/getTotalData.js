@@ -169,9 +169,8 @@ async function run(oracledb, obj) {
     // TODO 쿼리에 지역화폐, 카카오페이 추가하기
     let query = `
     SELECT
-        --DEP_NM
-        --,TERM_ID
-        TERM_NM
+		    ROWNUM
+		    ,CASE WHEN TERM_NM IS NULL THEN '합계' ELSE TERM_NM END TERM_NM
         ,TOTCNT
         ,TOTAMT
         ,ACNT
@@ -193,7 +192,7 @@ async function run(oracledb, obj) {
         ,KP
     FROM(    
         SELECT
-            TID
+        	TERM_NM
             ,SUM(ACNT)+SUM(CCNT) TOTCNT
             ,SUM(AAMT)-SUM(CAMT) TOTAMT
             ,SUM(ACNT) ACNT
@@ -215,7 +214,7 @@ async function run(oracledb, obj) {
             ,SUM(AKP)-SUM(CKP) KP
         FROM(    
             SELECT
-                TID
+                TERM_NM
                 ,CASE WHEN APPGB='A' THEN COUNT(1) ELSE 0 END ACNT
                 ,CASE WHEN APPGB='A' THEN SUM(AMOUNT) ELSE 0 END AAMT
                 ,CASE WHEN APPGB='C' THEN COUNT(1) ELSE 0 END CCNT
@@ -284,18 +283,15 @@ async function run(oracledb, obj) {
                 LEFT OUTER JOIN( SELECT DEP_NM, DEP_CD FROM TB_BAS_DEPART ${ORG_WH})T4 ON(T3.DEP_CD=T4.DEP_CD)
                 LEFT OUTER JOIN( SELECT PUR_NM, PUR_OCD, PUR_KOCES, PUR_KIS FROM TB_BAS_PURINFO)T5 ON (T1.ACQ_CD=T5.PUR_OCD OR T1.ACQ_CD=T5.PUR_KOCES OR T1.ACQ_CD=T5.PUR_KIS)
                 ${SET_WHERE}
-                ORDER BY APPDD DESC, APPTM DESC
                 )
             )
-          ${EXTRA_WHERE}
+            ${EXTRA_WHERE}
         )
-        GROUP BY TID, APPGB, ACQ_CD
+        GROUP BY TERM_NM, APPGB, ACQ_CD
         )
-        GROUP BY ROLLUP(TID)     
-    )T2
-    LEFT OUTER JOIN( SELECT DEP_CD, TERM_NM, TERM_ID FROM TB_BAS_TIDMST ${ORG_WH})T3 ON(T2.TID=T3.TERM_ID)
-    LEFT OUTER JOIN( SELECT DEP_NM, DEP_CD FROM TB_BAS_DEPART ${ORG_WH})T4 ON(T3.DEP_CD=T4.DEP_CD)
-    ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
+        GROUP BY ROLLUP(TERM_NM)
+        ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
+      )
     `
     result = await connection.execute(query, binds, options);
 
