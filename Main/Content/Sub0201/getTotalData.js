@@ -10,37 +10,6 @@ async function run(oracledb, obj) {
       password: config.password,
       connectString: config.connectString
     });
-    //   let where = {
-    //     "APPNO": "22074616",
-    //     "ADD_CID": "3570526",
-    //     "ADD_CASHER": "K032",
-    //     "SAMOUNT": "0",
-    //     "EAMOUNT": "1300",
-    //     "CARDNO": "12345678901234",
-    //     "MID": "72209332",
-    //     "ADD_CD": "FC",
-    //     "ADD_GB": "O",
-    //     "SDATE": "20220823",
-    //     "EDATE": "20220823",
-    //     "ACQ_CD": "VC0030,12",
-    //     "CHECK_CARD": "Y",
-    //     "OVSEA_CARD": "N",
-    //     "DEP_CD": [
-    //         "MD1599704551",
-    //         "MD1603168055"
-    //     ],
-    //     "TID": [
-    //         "0370000",
-    //         "8102004001",
-    //         "8102013001"
-    //     ],
-    //     "APPGB": [
-    //         "A"
-    //     ],
-    //     "AUTHSTAT": [
-    //         "정상거래"
-    //     ]
-    // }
 
     let AUTH_WH = new Array();
     let WH = new Array();
@@ -169,8 +138,7 @@ async function run(oracledb, obj) {
     // TODO 쿼리에 지역화폐, 카카오페이 추가하기
     let query = `
     SELECT
-		    ROWNUM
-		    ,CASE WHEN TERM_NM IS NULL THEN '합계' ELSE TERM_NM END TERM_NM
+		    CASE WHEN TERM_NM IS NULL THEN '합계' ELSE TERM_NM END TERM_NM
         ,TOTCNT
         ,TOTAMT
         ,ACNT
@@ -296,7 +264,7 @@ async function run(oracledb, obj) {
     result = await connection.execute(query, binds, options);
 
     let rst = result.rows;
-    //console.log(rst)
+    console.log(rst)
     return rst;
   } catch (err) {
     console.error(err);

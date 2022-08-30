@@ -52,12 +52,23 @@ router.route('/Sub0201/:reqUrl')
         }else{
             console.log('빈 객체');
         }
-        
-        dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res)
-        .then(res.send.bind(res))
-        .catch((err) => {
-            res.status(500).send(err.toString())
-        })
+        const getRows = async () => {
+            let data = await dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res);
+            data = data.map((obj, i, arr) => {
+                return obj = {
+                    ROWNUM: i, ...obj
+                }
+            })
+            console.log(data)
+            
+        }
+        getRows();
+        // TODO 합계, 소계 제외하고 ROWNUM 붙히기
+        // dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res)
+        // .then(res.send.bind(res))
+        // .catch((err) => {
+        //     res.status(500).send(err.toString())
+        // })
     })
 
 module.exports = router;
