@@ -171,8 +171,7 @@ async function run(oracledb, obj) {
     SELECT
         --DEP_NM
         --,TERM_ID
-		    ROWNUM
-        ,TERM_NM
+        TERM_NM
         ,TOTCNT
         ,TOTAMT
         ,ACNT
@@ -292,15 +291,16 @@ async function run(oracledb, obj) {
         )
         GROUP BY TID, APPGB, ACQ_CD
         )
-        GROUP BY TID        
+        GROUP BY ROLLUP(TID)     
     )T2
     LEFT OUTER JOIN( SELECT DEP_CD, TERM_NM, TERM_ID FROM TB_BAS_TIDMST ${ORG_WH})T3 ON(T2.TID=T3.TERM_ID)
     LEFT OUTER JOIN( SELECT DEP_NM, DEP_CD FROM TB_BAS_DEPART ${ORG_WH})T4 ON(T3.DEP_CD=T4.DEP_CD)
+    ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
     `
     result = await connection.execute(query, binds, options);
 
     let rst = result.rows;
-    //console.log(rst)
+    console.log(rst)
     return rst;
   } catch (err) {
     console.error(err);
