@@ -13,7 +13,11 @@ router.route('/:reqUrl')
             const uMenu = await dbconn.getData(`$Main/Sidebar/${req.params.reqUrl}`, obj, res)
             return common.uMenu_trans(uMenu);
         }
-        getMenu().then(res.send.bind(res));
+        getMenu()
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
     })
 
 module.exports = router;

@@ -89,13 +89,17 @@ router.route('/AuthLogin')
                         socket.writeData(authSocket, trData);
 
                     })
-                    .catch(() => { throw "signToken Error" });
+                    .catch((err) => { throw err.toString() });
             } catch (err) {
                 Obj.errMsg = err;
             }
             return Obj;
         }
-        userINFO().then(res.send.bind(res));
+        userINFO()
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
     })
 
 module.exports = router;

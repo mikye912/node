@@ -9,7 +9,11 @@ router.route('/:reqUrl')
         
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
         
-        dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+        dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res)
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
     })
     .put((req, res) => {
         const jsonObj = req.body;
@@ -30,7 +34,11 @@ router.route('/:reqUrl')
                 obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
                 obj.seq = seq;
                 obj.sort = jsonObj.right.length > 0 ? sql : sort;
-                dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+                dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res)
+                .then(res.send.bind(res))
+                .catch((err) => {
+                    res.status(500).send(err.toString())
+                });
                 break;
             default:
                 break;

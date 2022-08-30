@@ -16,30 +16,29 @@ router.route('/getUserSearch')
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
 
-            return await dbconn.getDataAll(arr).then((res) => {
+            return await dbconn.getDataAll(arr)
+            .then((res) => {
                 return common.uSearch_trans(res[0], res[1], res[2], res[3]);
             });
         }
-        getSearch().then(res.send.bind(res));
+        getSearch()
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
     })
 
 router.route('/Sub0000/:reqUrl')
     .get((req, res) => {
-
-        switch (req.params.reqUrl) {
-            case 'notice_0000':
-                dbconn.getData(`$Main/Content/Sub0000/${req.params.reqUrl}`).then(res.send.bind(res));
-                break;
-            default:
-                break;
-        }
-    })
-    .post((req, res) => {
         let obj = new Object();
 
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-        dbconn.getData(`$Main/Content/Sub0000/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+        dbconn.getData(`$Main/Content/Sub0000/${req.params.reqUrl}`, obj, res)
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
     })
 
 router.route('/Sub0201/:reqUrl')
@@ -54,7 +53,11 @@ router.route('/Sub0201/:reqUrl')
             console.log('빈 객체');
         }
         
-        dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res).then(res.send.bind(res));
+        dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res)
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        })
     })
 
 module.exports = router;

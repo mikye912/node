@@ -167,7 +167,47 @@ async function run(oracledb, obj) {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
     let query = `
-    SELECT 	* FROM ( 
+    SELECT 	
+        SEQNO,
+        TID,
+        MID,
+        VANGB,
+        MDATE,
+        TRANIDX,
+        APPGB,
+        AUTHSTAT,
+        ENTRYMD,
+        APPDD,
+        APPTM,
+        APPNO,
+        CARDNO,
+        HALBU,
+        AMOUNT,
+        ACQ_CD,
+        PUR_NM,
+        AUTHCD,
+        CHECK_CARD,
+        OVSEA_CARD,
+        TLINEGB,
+        SIGNCHK,
+        OAPPNO,
+        OAPPDD,
+        ISS_CD,
+        ADD_GB,
+        ADD_CID,
+        ADD_CD,
+        ADD_RECP,
+        ADD_CASHER,
+        DEP_NM,
+        EXP_DD,
+        REG_DD,
+        RTN_CD,
+        TERM_NM,
+        DEPO_DD,
+        OAPP_AMT,
+        DDCGB,
+        MEDI_GOODS
+    FROM ( 
         SELECT
             SEQNO
             , TID
