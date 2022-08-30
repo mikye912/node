@@ -168,6 +168,7 @@ async function run(oracledb, obj) {
     };
     let query = `
     SELECT 	
+        ROWNUM,
         SEQNO,
         TID,
         MID,
