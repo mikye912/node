@@ -43,13 +43,12 @@ router.route('/Sub0000/:reqUrl')
     })
 
 router.route('/Sub0201/:reqUrl')
-    .post((req, res) => {
+    .get((req, res) => {
         let obj = new Object();
-        
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-        if (!common.isEmptyObj(req.body.postData)){
-            obj.where = req.body.postData;
+        if (!common.isEmptyObj(req.query)){
+            obj.where = req.query;
             console.log(obj.where);
         }else{
             console.log('빈 객체');
