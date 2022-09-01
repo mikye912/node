@@ -15,13 +15,13 @@ router.route('/usercontent')
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
-            arr = [...arr, dbconn.createPromise('$Main/Content/getUserDomain', obj)];
+            arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
 
             return await dbconn.getDataAll(arr)
             .then((res) => {
                 return {
-                    uSearch : common.uSearch_trans(res[0], res[1], res[2], res[3]),
-                    uDomain : JSON.stringify(res[4])
+                   uSearch: common.uSearch_trans(res[0], res[1], res[2], res[3]),
+                   uDomain: res[4],
                 }
             });
         }

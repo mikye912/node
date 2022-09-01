@@ -262,7 +262,7 @@ module.exports = {
         } catch (err) {
             console.log(err)
         }
-        return JSON.stringify(arrFin);
+        return arrFin;
     },
     /**
      * JsonWebToken 을 발급해주는 Promise 객체를 담은 함수
