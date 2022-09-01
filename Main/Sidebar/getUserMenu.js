@@ -13,7 +13,7 @@ async function run(oracledb, obj) {
 
     let binds = {
       authSeq : obj.uInfo[8],
-      orgCd : obj.uInfo[1],
+      orgcd : obj.uInfo[1],
     };
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
@@ -36,7 +36,7 @@ async function run(oracledb, obj) {
       LEFT OUTER JOIN 
           (SELECT PROGRAM_SEQ, PROGRAM_NAME, PARENT_SEQ, DEPTH, SRC_LOCATION, SORT FROM TB_SYS_PROGRAM_TEMP) B 
       ON (A.PROGRAM_SEQ=B.PROGRAM_SEQ) 
-      WHERE A.AUTH_SEQ=:authSeq AND ORGCD=:orgCd
+      WHERE A.AUTH_SEQ=:authSeq AND ORGCD=:orgcd
       ORDER BY A.PROGRAM_SEQ, B.SORT ASC
       `
       , binds, options);

@@ -14,7 +14,7 @@ async function run(oracledb, obj) {
     oracledb.autoCommit = true;
 
     let binds = {
-      orgCd : obj.uInfo[1],
+      orgcd : obj.uInfo[1],
     };
 
     let options = {
@@ -32,11 +32,11 @@ async function run(oracledb, obj) {
       TERM_ID AS VALUE,
       DEP_CD
     FROM TB_BAS_TIDMST
-    WHERE ORG_CD=:orgCd ${whDepCd}
+    WHERE ORG_CD=:orgcd ${whDepCd}
     ORDER BY TERM_SORT ASC
     ) T1
     LEFT OUTER JOIN (
-      SELECT DEP_NM AS TITLE, DEP_CD FROM TB_BAS_DEPART WHERE ORG_CD=:orgCd ${whDepCd}
+      SELECT DEP_NM AS TITLE, DEP_CD FROM TB_BAS_DEPART WHERE ORG_CD=:orgcd ${whDepCd}
     ) T2 ON(T1.DEP_CD = T2.DEP_CD)
     ORDER BY TITLE ASC, NAME ASC
     `
@@ -47,11 +47,11 @@ async function run(oracledb, obj) {
     //     TERM_NM AS NAME,
     //     TERM_ID AS VALUE
     //   FROM TB_BAS_TIDMST 
-    //   WHERE ORG_CD=:orgCd AND TERM_ID IN ( 
+    //   WHERE ORG_CD=:orgcd AND TERM_ID IN ( 
     //     SELECT 
     //       TID 
     //     FROM TB_BAS_TIDMAP 
-    //       WHERE ORG_CD=:orgCd ${whDepCd}
+    //       WHERE ORG_CD=:orgcd ${whDepCd}
     //     ) 
     //   ORDER BY TERM_SORT ASC
     // `

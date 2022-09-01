@@ -14,14 +14,14 @@ async function run(oracledb, obj) {
     oracledb.autoCommit = true;
 
     let binds = {
-      orgCd : obj.uInfo[1],
+      orgcd : obj.uInfo[1],
     };
 
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
     let query = `
-    SELECT DEP_NM AS NAME, DEP_CD AS VALUE FROM TB_BAS_DEPART WHERE ORG_CD=:orgCd ${whDepCd}
+    SELECT DEP_NM AS NAME, DEP_CD AS VALUE FROM TB_BAS_DEPART WHERE ORG_CD=:orgcd ${whDepCd}
     `
     result = await connection.execute(query, binds, options);
     

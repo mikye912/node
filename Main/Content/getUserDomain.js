@@ -21,15 +21,19 @@ async function run(oracledb, obj) {
     
     let query = `
     SELECT 
+      ORG_CD,
+      HEADERNAME,
+      HEADERALIGN,
+      "TYPE",
+      WIDTH,
+      FIELD,
       PAGE,
-      NAME, 
-      FIELD, 
-      TYPE, 
-      DEFAULT_YN, 
-      SORT
-    FROM TB_BAS_SEARCHBOX_NEW
+      SORT,
+      VISIABLE,
+      CATEGORY
+    FROM TB_SYS_DOMAIN_NEW 
     WHERE ORG_CD = :orgcd
-    ORDER BY PAGE ASC, DEFAULT_YN DESC, SORT ASC
+    ORDER BY ORG_CD ASC, CATEGORY DESC, SORT ASC
     `
     result = await connection.execute(query, binds, options);
     
