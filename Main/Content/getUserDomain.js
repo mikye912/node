@@ -27,6 +27,7 @@ async function run(oracledb, obj) {
       HEADERALIGN AS "headerAlign",
       "TYPE" AS "type",
       WIDTH AS "width",
+      ALIGN AS "align",
       FIELD AS "field",
       PAGE AS "page",
       SORT AS "sort",
