@@ -362,4 +362,21 @@ module.exports = {
             return seconds.toString().padStart(2,'0');
         }
     },
+    setRnumData: (arr) => {
+        let cnt = 1;
+        arr = arr.map((crr) => {
+            if(crr.TERM_NM !== '합계' && crr.TERM_NM !== '소계'){
+                crr = {
+                    ROWNUM: cnt, ...crr
+                }
+                cnt++;
+            }else{
+                crr = {
+                    ROWNUM: null, ...crr
+                }
+            }
+            return crr;
+        })
+        return arr;
+    }
 }
