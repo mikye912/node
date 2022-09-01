@@ -15,7 +15,7 @@ router.route('/usercontent')
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
             arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
-            arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
+            arr = [...arr, dbconn.createPromise('$Main/Content/getUserDomain', obj)];
 
             return await dbconn.getDataAll(arr)
             .then((res) => {
