@@ -13,6 +13,7 @@ async function run(oracledb, obj) {
 
     let binds = {
       orgcd : obj.uInfo[1],
+      userid : obj.uInfo[0],
     };
 
     let options = {
@@ -21,7 +22,7 @@ async function run(oracledb, obj) {
     
     let query = `
     SELECT 
-      ORG_CD,
+      --ORG_CD,
       HEADERNAME,
       HEADERALIGN,
       "TYPE",
@@ -31,8 +32,9 @@ async function run(oracledb, obj) {
       SORT,
       VISIABLE,
       CATEGORY
+      --USER_ID
     FROM TB_SYS_DOMAIN_NEW 
-    WHERE ORG_CD = :orgcd
+    WHERE ORG_CD = :orgcd AND USER_ID = :userid
     ORDER BY ORG_CD ASC, CATEGORY DESC, SORT ASC
     `
     result = await connection.execute(query, binds, options);
