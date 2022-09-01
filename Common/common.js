@@ -339,7 +339,7 @@ module.exports = {
             let hours = new Date(data);
             hours = hours.getHours();
 
-            return hours.toString().padStart(2,'0');
+            return hours.toString().padStart(2, '0');
         },
         minutes: (num = 0) => {
             // return new Date().getMinutes() + (num);
@@ -349,7 +349,7 @@ module.exports = {
             let minutes = new Date(data);
             minutes = minutes.getMinutes();
 
-            return minutes.toString().padStart(2,'0');
+            return minutes.toString().padStart(2, '0');
         },
         seconds: (num = 0) => {
             // return new Date().getSeconds() + (num);
@@ -359,18 +359,23 @@ module.exports = {
             let seconds = new Date(data);
             seconds = seconds.getSeconds();
 
-            return seconds.toString().padStart(2,'0');
+            return seconds.toString().padStart(2, '0');
         }
     },
+    /**
+     * DB연동 후 결과 데이터에 합계, 소계 ROW를 제외한 ROW에 ROWNUM을 추가해주는 함수
+     * @param {Array} arr DB 결과 데이터를 담은 Array 객체
+     * @returns ROWNUM을 추가한 Array 객체를 반환
+     */
     setRnumData: (arr) => {
         let cnt = 1;
         arr = arr.map((crr) => {
-            if(crr.TERM_NM !== '합계' && crr.TERM_NM !== '소계'){
+            if (crr.TERM_NM !== '합계' && crr.TERM_NM !== '소계') {
                 crr = {
                     ROWNUM: cnt, ...crr
                 }
                 cnt++;
-            }else{
+            } else {
                 crr = {
                     ROWNUM: null, ...crr
                 }

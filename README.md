@@ -23,3 +23,7 @@
 ## cookie-parser
 ### 요청 Header 쿠키 값 JSON Parse
 -> npm install cookie-parser
+
+## winston-daily-rotate-file
+### 서버 로그 관리 모듈
+-> npm install winston-daily-rotate-file
