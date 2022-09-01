@@ -23,15 +23,15 @@ async function run(oracledb, obj) {
     let query = `
     SELECT 
       --ORG_CD,
-      HEADERNAME,
-      HEADERALIGN,
-      "TYPE",
-      WIDTH,
-      FIELD,
-      PAGE,
-      SORT,
-      VISIABLE,
-      CATEGORY
+      HEADERNAME AS "headerName",
+      HEADERALIGN AS "headerAlign",
+      "TYPE" AS "type",
+      WIDTH AS "width",
+      FIELD AS "field",
+      PAGE AS "page",
+      SORT AS "sort",
+      VISIABLE AS "visiable",
+      CATEGORY AS "category"
       --USER_ID
     FROM TB_SYS_DOMAIN_NEW 
     WHERE ORG_CD = :orgcd AND USER_ID = :userid
@@ -40,7 +40,7 @@ async function run(oracledb, obj) {
     result = await connection.execute(query, binds, options);
     
     let rst = result.rows;
-    
+    //console.log(rst)
     return rst;
   } catch (err) {
     console.error(err);
