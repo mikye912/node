@@ -1,4 +1,9 @@
 module.exports = {
+    /**
+     * logger 파일 남겨주는 함수
+     * @param {String} level log level => error, info, debug
+     * @param {String} message 로그 남길 메세지
+     */
     logger(level, message) {
         const logger = require('./winston')
         switch (level) {
