@@ -8,7 +8,7 @@ router.route('/:reqUrl')
         let obj = new Object();
         
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
-        
+
         dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res)
         .then(res.send.bind(res))
         .catch((err) => {

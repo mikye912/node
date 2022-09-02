@@ -1,4 +1,5 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb, obj, res) {
   let connection;
@@ -21,56 +22,63 @@ async function run(oracledb, obj, res) {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
 
-    result = await connection.execute(
-      `
-      SELECT 
-        T1.ORG_CD,
-        T1.AUTH_SEQ,
-        T1.USER_ID,
-        T1.USER_PW,
-        T1.USER_NM,
-        T1. USER_TEL1,
-        T1.USER_TEL2,
-        T1.USE_CHK,
-        T1.DEP_CD,
-        T1.USER_LV,
-        T1.AUTH_QRY01,
-        T1.AUTH_QRY02,
-        T1.AUTH_QRY03,
-        T1.AUTH_QRY04,
-        T1.TRANS_NO,
-        T2.ORG_NM,
-        T2.ORG_NO,
-        T2.ORG_ADDR,
-        T2.ORG_TEL1,
-        T2.ORG_TEL2,
-        T2.ORG_USER,
-        T2.PTAB,
-        T2.VTAB,
-        T2.DTAB,
-        T2.CTAB
-      FROM TB_BAS_USER T1
-      LEFT OUTER JOIN( SELECT * FROM TB_BAS_ORG )T2 ON(T1.ORG_CD=T2.ORG_CD)
-      WHERE USER_ID=:userId
-      `
-      , binds, options);
+    let query = `
+    SELECT 
+      T1.ORG_CD,
+      T1.AUTH_SEQ,
+      T1.USER_ID,
+      T1.USER_PW,
+      T1.USER_NM,
+      T1. USER_TEL1,
+      T1.USER_TEL2,
+      T1.USE_CHK,
+      T1.DEP_CD,
+      T1.USER_LV,
+      T1.AUTH_QRY01,
+      T1.AUTH_QRY02,
+      T1.AUTH_QRY03,
+      T1.AUTH_QRY04,
+      T1.TRANS_NO,
+      T2.ORG_NM,
+      T2.ORG_NO,
+      T2.ORG_ADDR,
+      T2.ORG_TEL1,
+      T2.ORG_TEL2,
+      T2.ORG_USER,
+      T2.PTAB,
+      T2.VTAB,
+      T2.DTAB,
+      T2.CTAB
+    FROM TB_BAS_USER T1
+    LEFT OUTER JOIN( SELECT * FROM TB_BAS_ORG )T2 ON(T1.ORG_CD=T2.ORG_CD)
+    WHERE USER_ID=:userId
+    `
+
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
+    result = await connection.execute(query, binds, options);
     let rst = result.rows;
     if (rst[0]) {
       if (rst[0].USE_CHK == "9") {
         throw { errMsg: '계정이 잠겼습니다. 관리자에게 문의주세요.' };
       } else if (rst[0].USER_PW != userPw) {
-        result = await connection.execute(
-          `
-              UPDATE TB_BAS_USER SET 
-                USE_CHK= (
-                          SELECT 
-                            NVL(USE_CHK, 0) 
-                            FROM TB_BAS_USER 
-                          WHERE USER_ID=:userId
-                          ) +1 
-              WHERE USER_ID=:userId
-              `
-          , binds, options);
+
+        let query = `
+        UPDATE TB_BAS_USER SET 
+          USE_CHK= (
+                    SELECT 
+                      NVL(USE_CHK, 0) 
+                      FROM TB_BAS_USER 
+                    WHERE USER_ID=:userId
+                    ) +1 
+        WHERE USER_ID=:userId
+        `
+
+        let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+        common.logger('info', `query debug => ${debugQuery}`);
+
+        result = await connection.execute(query, binds, options);
 
         let rst = result.rowsAffected;
         console.log('Rows Update : ' + rst);
@@ -82,7 +90,7 @@ async function run(oracledb, obj, res) {
         jsonObj.MEMBER_ORG = rst[0].ORG_CD;
         jsonObj.MEMBER_DEPO = rst[0].DEP_CD;
         jsonObj.MKTIME = new Date().getTime() / 1000,
-        jsonObj.PTAB = rst[0].PTAB;
+          jsonObj.PTAB = rst[0].PTAB;
         jsonObj.VTAB = rst[0].VTAB;
         jsonObj.DTAB = rst[0].DTAB;
         jsonObj.USER_LV = rst[0].USER_LV;

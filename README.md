@@ -27,3 +27,7 @@
 ## winston-daily-rotate-file
 ### 서버 로그 관리 모듈
 -> npm install winston-daily-rotate-file
+
+## bind-sql-string
+### 바인딩 된 쿼리 디버그 모듈
+-> npm install bind-sql-string

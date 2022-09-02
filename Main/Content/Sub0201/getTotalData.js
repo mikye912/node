@@ -261,6 +261,10 @@ async function run(oracledb, obj) {
         ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
       )
     `
+
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
     result = await connection.execute(query, binds, options);
 
     let rst = result.rows;

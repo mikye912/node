@@ -1,34 +1,36 @@
 const net = require('net');
+const common = require('$Common/common');
 
 module.exports = {
     getConnection(connName, connInfo){
         let client = net.connect(connInfo);
         client.on('connect', () => {
-            console.log(connName + ' Connected: ');
-            console.log('   local = %s:%s', client.localAddress, client.localPort);
-            console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
+            common.logger('info', `${connName} Connected`);
+            common.logger('info', `   local = ${client.localAddress} ${client.localPort}`);
+            common.logger('info', `   remote = ${client.remoteAddress} ${client.remotePort}`);
         })
         client.setTimeout(5000);
         client.setEncoding('utf8');
         client.on('data', (data) => {
-            console.log(connName + " From Server: " + data.toString());
+            common.logger('info', `${connName} From Server: ${data.toString()}`);
             client.end();
         });
         client.on('end', () => {
-            console.log(connName + ' Client disconnected');
+            common.logger('info', `${connName} Client disconnected`);
         });
         client.on('error', (err) => {
-            console.log('Socket Error: ', JSON.stringify(err));
+            common.logger('error', `Socket Error: ${JSON.stringify(err)}`);
         });
         client.on('timeout', () => {
-            console.log('Socket Timed Out');
+            common.logger('info', `Socket Timed Out`);
         });
         client.on('close', () => {
-            console.log('Socket Closed');
+            common.logger('info', `Socket Closed`);
         });
         return client;
       },
       writeData(socket, data){
+        common.logger('info', `Send To Server: ${data}`);
         let success = !socket.write(data);
         if (!success){
           ((socket, data) => {

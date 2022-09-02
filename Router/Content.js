@@ -2,7 +2,6 @@ const dbconn = require('$Common/dbconn');
 const common = require('$Common/common');
 const express = require('express');
 const router = express.Router();
-const logger = require('../Common/winston');
 
 router.route('/usercontent')
     .get((req, res) => {

@@ -1,4 +1,5 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb, obj) {
   let connection;
@@ -31,6 +32,10 @@ async function run(oracledb, obj) {
     WHERE ORG_CD = :orgcd
     ORDER BY PAGE ASC, DEFAULT_YN DESC, SORT ASC
     `
+
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
     result = await connection.execute(query, binds, options);
     
     let rst = result.rows;

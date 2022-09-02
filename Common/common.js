@@ -1,6 +1,18 @@
-const jwt = require('jsonwebtoken');
-
 module.exports = {
+    logger(level, message) {
+        const logger = require('./winston')
+        switch (level) {
+            case 'debug':
+                logger.debug(message);
+                break;
+            case 'error':
+                logger.error(message);
+                break;
+            default: 
+                logger.info(message);
+                break;
+        }
+    },
     /**
      * 문자열에서 특수문자 제거 하는 함수
      * @param {String} str 문자열 타입
@@ -272,6 +284,7 @@ module.exports = {
      * @returns Promise 객체의 결과인 resolve, reject 반환
      */
     signToken(dataObj, secret, payloadObj) {
+        const jwt = require('jsonwebtoken');
         return new Promise((resolve, reject) => {
             jwt.sign(
                 dataObj,
@@ -383,5 +396,5 @@ module.exports = {
             return crr;
         })
         return arr;
-    }
+    },
 }

@@ -1,10 +1,11 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb, obj, res) {
   let connection;
 
   const binds = {
-    userId : obj.uInfo[0]
+    userId: obj.uInfo[0]
   }
 
   try {
@@ -18,7 +19,7 @@ async function run(oracledb, obj, res) {
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
-    
+
     let query = `
     SELECT 
       USER_ID, 
@@ -28,14 +29,17 @@ async function run(oracledb, obj, res) {
     FROM TB_BAS_USER 
     WHERE USER_ID=:userId
     `
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
     result = await connection.execute(query, binds, options);
-    
+
     let rst = result.rows;
     return rst;
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      dbErr : err
+      dbErr: err
     })
   } finally {
     if (connection) {

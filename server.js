@@ -1,4 +1,5 @@
 require('better-module-alias')(__dirname);
+const common = require('$Common/common');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const config = require('$Common/config');
@@ -10,7 +11,7 @@ const SidebarRouter = require('./Router/Sidebar');
 const ContentRouter = require('./Router/Content');
 
 app.listen(config.port, () => {
-    console.log(`listening on ${config.port}`);
+    common.logger('info', `listening on ${config.port}`);
 });
 app.set('jwt_secret', config.secret);
 

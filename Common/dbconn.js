@@ -1,5 +1,6 @@
 const oracledb = require('oracledb');
 oracledb.initOracleClient({ libDir: "./instantclient_21_3" });
+const sql = require('bind-sql-string');
 
 module.exports = {
     async getData(url, obj, res) {
@@ -10,5 +11,8 @@ module.exports = {
     },
     createPromise(url, obj) {
         return require(url).run(oracledb, obj);
+    },
+    queryBindToString(query, binds) {
+        return sql.queryBindToString(query, binds, {quoteEscaper:"''"});
     }
 }

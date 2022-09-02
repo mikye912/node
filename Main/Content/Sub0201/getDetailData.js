@@ -273,6 +273,10 @@ async function run(oracledb, obj) {
         )
         ${EXTRA_WHERE}
     `
+    
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
     result = await connection.execute(query, binds, options);
 
     let rst = result.rows;

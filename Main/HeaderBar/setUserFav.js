@@ -1,4 +1,5 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb, obj) {
     let connection;
@@ -15,14 +16,17 @@ async function run(oracledb, obj) {
             outFormat: oracledb.OUT_FORMAT_OBJECT
         };
 
-        result = await connection.execute(
-            `
-            UPDATE TB_SYS_FAVORITE SET
-            USE_YN=CASE WHEN PROGRAM_SEQ IN('${obj.seq}') THEN 'Y' ELSE 'N' END,
-            SORT=${obj.sort}
-            WHERE user_id='${obj.uInfo[0]}'
-            `
-            , [], options);
+        let query = `
+        UPDATE TB_SYS_FAVORITE SET
+        USE_YN=CASE WHEN PROGRAM_SEQ IN('${obj.seq}') THEN 'Y' ELSE 'N' END,
+        SORT=${obj.sort}
+        WHERE user_id='${obj.uInfo[0]}'
+        `
+
+        let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+        common.logger('info', `query debug => ${debugQuery}`);
+
+        result = await connection.execute(query, [], options);
         let rst = result.rowsAffected;
         return { rst: rst };
     } catch (err) {

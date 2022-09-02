@@ -1,4 +1,5 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb, obj) {
   let connection;
@@ -40,22 +41,9 @@ async function run(oracledb, obj) {
     ) T2 ON(T1.DEP_CD = T2.DEP_CD)
     ORDER BY TITLE ASC, NAME ASC
     `
-    
 
-    // `
-    //   SELECT 
-    //     TERM_NM AS NAME,
-    //     TERM_ID AS VALUE
-    //   FROM TB_BAS_TIDMST 
-    //   WHERE ORG_CD=:orgcd AND TERM_ID IN ( 
-    //     SELECT 
-    //       TID 
-    //     FROM TB_BAS_TIDMAP 
-    //       WHERE ORG_CD=:orgcd ${whDepCd}
-    //     ) 
-    //   ORDER BY TERM_SORT ASC
-    // `
-
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
 
     result = await connection.execute(query, binds, options);
     

@@ -1,4 +1,5 @@
 const config = require('$Common/config');
+const common = require('$Common/common');
 
 async function run(oracledb) {
   let connection;
@@ -15,11 +16,14 @@ async function run(oracledb) {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
 
-    result = await connection.execute(
-      `
-      SELECT SEQNO, VANGB, CONTENT FROM TB_SYS_NOTICE ORDER BY INS_DT desc
-      `
-      , [], options);
+    let query = `
+    SELECT SEQNO, VANGB, CONTENT FROM TB_SYS_NOTICE ORDER BY INS_DT desc
+    `
+
+    let debugQuery = require('bind-sql-string').queryBindToString(query, {}, { quoteEscaper: "''" });
+    common.logger('info', `query debug => ${debugQuery}`);
+
+    result = await connection.execute(query, [], options);
 
     let rst = result.rows;
     return rst;

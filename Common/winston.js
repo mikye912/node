@@ -52,7 +52,7 @@ const logger = winston.createLogger({
          datePattern: 'YYYY-MM-DD',
          dirname: logDir,
          filename: `%DATE%.exception.log`,
-         maxFiles: 30,
+         maxFiles: 90,
          zippedArchive: true,
       }),
    ],
