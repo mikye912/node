@@ -6,10 +6,17 @@ const router = express.Router();
 router.route('/:reqUrl')
     .get((req, res) => {
         let obj = new Object();
-        
+        let path = "";
+
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-        dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res)
+        switch (req.params.reqUrl) {
+            case 'favorites': path = 'getUserFav'; break;
+            case 'name': path = 'getUserName'; break;
+            default: break;
+        }
+
+        dbconn.getData(`$Main/HeaderBar/${path}`, obj, res)
         .then(res.send.bind(res))
         .catch((err) => {
             res.status(500).send(err.toString())
@@ -19,7 +26,7 @@ router.route('/:reqUrl')
         const jsonObj = req.body;
         
         switch (req.params.reqUrl) {
-            case 'setUserFav':
+            case 'favorites':
                 let arrSeq = new Array();
                 let obj = new Object();
                 let seq = '';
@@ -34,7 +41,7 @@ router.route('/:reqUrl')
                 obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
                 obj.seq = seq;
                 obj.sort = jsonObj.right.length > 0 ? sql : sort;
-                dbconn.getData(`$Main/HeaderBar/${req.params.reqUrl}`, obj, res)
+                dbconn.getData(`$Main/HeaderBar/setUserFav`, obj, res)
                 .then(res.send.bind(res))
                 .catch((err) => {
                     res.status(500).send(err.toString())

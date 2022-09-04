@@ -18,9 +18,9 @@ app.set('jwt_secret', config.secret);
 app.use(cookieParser());
 app.use(express.json());
 
-app.use('/Login', LoginRouter);
+app.use('/auth', LoginRouter);
 
-app.use('/Main', authMiddleware); // 해당 URL로 시작하는 모든 요청 시, 토큰 검증 진행
-app.use('/Main/HeaderBar', HeaderBarRouter);
-app.use('/Main/Sidebar', SidebarRouter);
-app.use('/Main/Content', ContentRouter);
+app.use('/users', authMiddleware); // 해당 URL로 시작하는 모든 요청 시, 토큰 검증 진행
+app.use('/users/headers', HeaderBarRouter);
+app.use('/users/sidemenus', SidebarRouter);
+app.use('/users/contents', ContentRouter);

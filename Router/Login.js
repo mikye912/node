@@ -4,7 +4,7 @@ const socket = require('$Common/socket');
 const express = require('express');
 const router = express.Router();
 
-router.route('/AuthLogin')
+router.route('/')
     .get((req, res) => {
         let Obj = new Object();
         const jsonObj = req.query;

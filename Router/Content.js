@@ -3,7 +3,7 @@ const common = require('$Common/common');
 const express = require('express');
 const router = express.Router();
 
-router.route('/usercontent')
+router.route('/items')
     .get((req, res) => {
         let obj = new Object();
 
@@ -32,39 +32,105 @@ router.route('/usercontent')
         });
     })
 
-router.route('/Sub0000/:reqUrl')
+router.route('/:pages/:do')
     .get((req, res) => {
         let obj = new Object();
+        let fetchData;
 
         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-        dbconn.getData(`$Main/Content/Sub0000/${req.params.reqUrl}`, obj, res)
+        switch (req.params.pages) {
+            case '0000':
+                switch (req.params.do) {
+                    case 'chart':
+                        fetchData = async () => {
+                            let arr = new Array();
+                            arr = [...arr, dbconn.createPromise(`$Main/Content/Sub0000/chart_0000`, obj)];
+                            arr = [...arr, dbconn.createPromise('$Main/Content/Sub0000/chartData_0000', obj)];
+                
+                            return await dbconn.getDataAll(arr)
+                            .then((res) => {
+                                return {
+                                   chart: res[0],
+                                   chartData: res[1],
+                                }
+                            });
+                        }
+                        break;
+                    case 'deposit':
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/Sub0000/depo_0000`, obj, res)
+                        }
+                        break;
+                    case 'notice':
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/Sub0000/notice_0000`, obj, res)
+                        }
+                        break;
+                    case 'sales':
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/Sub0000/sales_0000`, obj, res)
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case '0201':
+                if (!common.isEmptyObj(req.query)){
+                    obj.where = req.query;
+                    console.log(obj.where);
+                }else{
+                    console.log('빈 객체');
+                }
+                    switch (req.params.do) {
+                        case 'total':
+                            fetchData = async () => {
+                                let data = await dbconn.getData(`$Main/Content/Sub0201/getTotalData`, obj, res);
+                                return common.setRnumData(data);
+                            }
+                            break;
+                        case 'detail':
+                            fetchData = async () => {
+                                let data = await dbconn.getData(`$Main/Content/Sub0201/getDetailData`, obj, res);
+                                return common.setRnumData(data);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                break;
+            default:
+                break;
+        }
+
+        fetchData()
         .then(res.send.bind(res))
         .catch((err) => {
             res.status(500).send(err.toString())
         });
     })
 
-router.route('/Sub0201/:reqUrl')
-    .get((req, res) => {
-        let obj = new Object();
-        obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
+// router.route('/Sub0201/:reqUrl')
+//     .get((req, res) => {
+//         let obj = new Object();
+//         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-        if (!common.isEmptyObj(req.query)){
-            obj.where = req.query;
-            console.log(obj.where);
-        }else{
-            console.log('빈 객체');
-        }
-        const getRows = async () => {
-            let data = await dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res);
-            return common.setRnumData(data);
-        }
-        getRows()
-        .then(res.send.bind(res))
-        .catch((err) => {
-            res.status(500).send(err.toString())
-        })
-    })
+//         if (!common.isEmptyObj(req.query)){
+//             obj.where = req.query;
+//             console.log(obj.where);
+//         }else{
+//             console.log('빈 객체');
+//         }
+//         const getRows = async () => {
+//             let data = await dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res);
+//             return common.setRnumData(data);
+//         }
+//         getRows()
+//         .then(res.send.bind(res))
+//         .catch((err) => {
+//             res.status(500).send(err.toString())
+//         })
+//     })
 
 module.exports = router;

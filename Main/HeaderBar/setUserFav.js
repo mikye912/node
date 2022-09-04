@@ -23,7 +23,7 @@ async function run(oracledb, obj) {
         WHERE user_id='${obj.uInfo[0]}'
         `
 
-        let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+        let debugQuery = require('bind-sql-string').queryBindToString(query, [], { quoteEscaper: "''" });
         common.logger('info', `query debug => ${debugQuery}`);
 
         result = await connection.execute(query, [], options);
