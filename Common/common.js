@@ -13,6 +13,9 @@ module.exports = {
             case 'error':
                 logger.error(message);
                 break;
+            case 'http':
+                logger.http(message);
+                break;
             default: 
                 logger.info(message);
                 break;

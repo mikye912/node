@@ -5,16 +5,19 @@ const cookieParser = require('cookie-parser');
 const config = require('$Common/config');
 const app = express();
 const authMiddleware = require('./MiddleWare/jwtAuth');
+const morganMiddleware = require('./Common/morgan');
 const LoginRouter = require('./Router/Login');
 const HeaderBarRouter = require('./Router/HeaderBar');
 const SidebarRouter = require('./Router/Sidebar');
 const ContentRouter = require('./Router/Content');
+
 
 app.listen(config.port, () => {
     common.logger('info', `listening on ${config.port}`);
 });
 app.set('jwt_secret', config.secret);
 
+app.use(morganMiddleware);
 app.use(cookieParser());
 app.use(express.json());
 

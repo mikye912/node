@@ -28,6 +28,10 @@
 ### 서버 로그 관리 모듈
 -> npm install winston-daily-rotate-file
 
+## morgan
+### 서버 요청, 응답 로그 관리 모듈
+-> npm install morgan
+
 ## bind-sql-string
 ### 바인딩 된 쿼리 디버그 모듈
 -> npm install bind-sql-string
