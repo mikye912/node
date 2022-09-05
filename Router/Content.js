@@ -100,6 +100,38 @@ router.route('/:pages/:do')
                             break;
                     }
                 break;
+            case '0202' :
+            break;
+            case '0203' :
+            break;
+            case '0204' :
+            break;
+            case '0205' :
+            break;
+            case '0206' :
+            break;
+            case '0207' :
+            break;
+            case '0208' :
+            break;
+            case '0209' :
+            break;
+            case '0210' :
+            break;
+            case '0211' :
+            break;
+            case '0212' :
+            break;
+            case '0213' :
+            break;
+            case '0214' :
+            break;
+            case '0215' :
+            break;
+            case '0216' :
+            break;
+            case '0217' :
+            break;
             default:
                 break;
         }
