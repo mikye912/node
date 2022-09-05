@@ -69,6 +69,25 @@ module.exports = {
         return Buffer.from(str, "base64").toString('utf-8');
     },
     /**
+     * AES 알고리즘으로 암호화하는 함수
+     * @param {string} str 문자열 타입
+     * @returns AES 암호화된 문자열 반환
+     */
+    cryptoEnc (str) {
+        const CryptoJS = require('crypto-js');
+        return CryptoJS.AES.encrypt(str, '970509920223').toString();
+    },
+    /**
+     * AES 알고리즘으로 복호화하는 함수
+     * @param {string} str 문자열 타입
+     * @returns AES 복호화된 문자열 반환
+     */
+    cryptoDec (str) {
+        const CryptoJS = require('crypto-js');
+        const bytes = CryptoJS.AES.decrypt(str, '970509920223');
+        return bytes.toString(CryptoJS.enc.Utf8);
+    },
+    /**
      * 사용자 정보를 가지고있는 Array 객체를 ':' 구분자로 합쳐 base64 로 암호화 하는 함수
      * @param {Array} arrObj Array 타입의 객체
      * @returns 암호화된 문자열 반환

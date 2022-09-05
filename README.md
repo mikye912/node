@@ -35,3 +35,7 @@
 ## bind-sql-string
 ### 바인딩 된 쿼리 디버그 모듈
 -> npm install bind-sql-string
+
+## crypto-js
+### 양방향 암호화 모듈
+-> npm install crypto-js
