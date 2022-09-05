@@ -78,7 +78,7 @@ router.route('/:pages/:do')
                 break;
             case '0201':
                 if (!common.isEmptyObj(req.query)){
-                    obj.where = req.query;
+                    obj.where = JSON.parse(common.cryptoDec(req.query.reqData));
                     console.log(obj.where);
                 }else{
                     console.log('빈 객체');
