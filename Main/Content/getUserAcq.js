@@ -18,7 +18,7 @@ async function run(oracledb) {
     SELECT PUR_CD ||','||PUR_KIS AS VALUE, PUR_NM AS NAME FROM TB_BAS_PURINFO WHERE PUR_USE='Y' ORDER BY PUR_SORT ASC
     `
 
-    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    let debugQuery = require('bind-sql-string').queryBindToString(query, [], { quoteEscaper: "''" });
     common.logger('info', `query debug => ${debugQuery}`);
 
     result = await connection.execute(query, [], options);
