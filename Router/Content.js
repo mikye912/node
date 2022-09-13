@@ -142,27 +142,55 @@ router.route('/:pages/:do')
             res.status(500).send(err.toString())
         });
     })
+    .put((req, res) => {
+        let obj = new Object();
+        const jsonObj = req.body;
+        let fetchData;
 
-// router.route('/Sub0201/:reqUrl')
-//     .get((req, res) => {
-//         let obj = new Object();
-//         obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
+        obj.uInfo = common.reqTokenToUinfo(req.headers.x_auth);
 
-//         if (!common.isEmptyObj(req.query)){
-//             obj.where = req.query;
-//             console.log(obj.where);
-//         }else{
-//             console.log('빈 객체');
-//         }
-//         const getRows = async () => {
-//             let data = await dbconn.getData(`$Main/Content/Sub0201/${req.params.reqUrl}`, obj, res);
-//             return common.setRnumData(data);
-//         }
-//         getRows()
-//         .then(res.send.bind(res))
-//         .catch((err) => {
-//             res.status(500).send(err.toString())
-//         })
-//     })
+        switch (req.params.pages) {
+            case '0201':
+                if (!common.isEmptyObj(req.params.pages)){
+                    console.log(req.params.do);
+                }else{
+                    console.log('빈 객체');
+                }
+                    switch (req.params.do) {
+                        case 'total':
+                        case 'detail':
+                            let visiable = null;
+                            let sort = null;
+                            let visiableSql = " CASE";
+                            let sortSql = " CASE";
+                            jsonObj.ITEMS.map((gridHeaders, index) => {
+                                visiableSql += " WHEN HEADERNAME = '" + gridHeaders.headerName + "' THEN '" + gridHeaders.visiable + "'"
+                                sortSql += " WHEN HEADERNAME = '" + gridHeaders.headerName + "' THEN " + (index + 1)
+                            })
+                            visiableSql += " ELSE null END ";
+                            sortSql += " ELSE null END ";
+                            
+                            obj.page = jsonObj.PAGE;
+                            obj.category = jsonObj.CATEGORY;
+                            obj.visiable = jsonObj.ITEMS.length > 0 ? visiableSql : visiable;
+                            obj.sort = jsonObj.ITEMS.length > 0 ? sortSql : sort;
+                            console.log(obj);
+                            fetchData = async () => {
+                                return await dbconn.getData(`$Main/Content/Sub0201/setGridHeaders`, obj, res);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                break;
+            default:
+                break;
+        }
+        fetchData()
+        .then(res.send.bind(res))
+        .catch((err) => {
+            res.status(500).send(err.toString())
+        });
+    })
 
 module.exports = router;
