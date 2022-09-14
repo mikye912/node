@@ -174,7 +174,11 @@ async function run(oracledb, obj) {
         VANGB,
         MDATE,
         TRANIDX,
-        APPGB,
+        CASE 
+          WHEN APPGB = 'A' THEN '신용승인' 
+          WHEN APPGB = 'C' THEN '신용취소' 
+          ELSE APPGB 
+        END APPGB,
         AUTHSTAT,
         ENTRYMD,
         APPDD,
@@ -201,7 +205,12 @@ async function run(oracledb, obj) {
         DEP_NM,
         EXP_DD,
         REG_DD,
-        RTN_CD,
+        CASE 
+          WHEN RTN_CD IN ('60','67') THEN '정상매입' 
+          WHEN RTN_CD IN ('61','64') THEN '매입반송' 
+          WHEN RTN_CD IS NULL THEN '결과없음' 
+          ELSE RTN_CD 
+        END RTN_CD,
         TERM_NM,
         DEPO_DD,
         OAPP_AMT,
@@ -273,7 +282,7 @@ async function run(oracledb, obj) {
         )
         ${EXTRA_WHERE}
     `
-    
+
     let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
     common.logger('info', `query debug => ${debugQuery}`);
 
