@@ -88,7 +88,7 @@ router.route('/:pages/:do')
                             fetchData = async () => {
                                 return await dbconn.getData(`$Main/Content/getTotalCols`, obj, res);
                             }
-                            break;
+                        break;
                         case 'detailcols':
                             fetchData = async () => {
                                 return await dbconn.getData(`$Main/Content/getDetailCols`, obj, res);
@@ -96,7 +96,7 @@ router.route('/:pages/:do')
                         break;
                         case 'searchparams':
                             obj.pages = req.params.pages;
-                            
+
                             fetchData = async () => {
                                 let arr = new Array();
                                 arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
