@@ -95,7 +95,7 @@ router.route('/:pages/:do')
                             }
                         break;
                         case 'searchparams':
-                            const fetchData = async () => {
+                            fetchData = async () => {
                                 let arr = new Array();
                                 arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
                                 arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
