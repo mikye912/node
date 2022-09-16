@@ -142,8 +142,6 @@ module.exports = {
      * @returns Array 형태인 문자열(JSON.stringify()) 을 반환
      */
     uSearch_trans(uSearch, uDepart, uTid, uAcq) {
-        let arrFin = new Array();
-        let jsonFin = new Object();
         let arrObj = new Array();
         let jsonObj = new Object();
 
@@ -272,36 +270,14 @@ module.exports = {
         }
         try {
             uSearch.map((crr, i, uSearch) => {
-                if (i !== uSearch.length - 1) {
-                    if (uSearch[i].PAGE === uSearch[i + 1].PAGE) {
-                        setJsonObj(uSearch[i]);
-                        arrObj = [...arrObj, jsonObj];
-                    } else {
-                        setJsonObj(uSearch[i]);
-                        arrObj = [...arrObj, jsonObj];
-                        jsonFin = {};
-                        jsonFin = {
-                            [uSearch[i].PAGE]: arrObj
-                        };
-                        arrFin = [...arrFin, jsonFin];
-                        arrObj = [];
-                    }
-                } else {
                     setJsonObj(uSearch[i]);
                     arrObj = [...arrObj, jsonObj];
-                    jsonFin = {};
-                    jsonFin = {
-                        [uSearch[i].PAGE]: arrObj
-                    };
-                    arrFin = [...arrFin, jsonFin];
-                    arrObj = [];
-                }
             })
             //console.log("test", JSON.stringify(arrFin))
         } catch (err) {
             console.log(err)
         }
-        return arrFin;
+        return arrObj;
     },
     /**
      * JsonWebToken 을 발급해주는 Promise 객체를 담은 함수
