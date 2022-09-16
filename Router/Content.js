@@ -84,6 +84,30 @@ router.route('/:pages/:do')
                     console.log('빈 객체');
                 }
                     switch (req.params.do) {
+                        case 'totalcols':
+                            fetchData = async () => {
+                                return await dbconn.getData(`$Main/Content/getTotalCols`, obj, res);
+                            }
+                            break;
+                        case 'detailcols':
+                            fetchData = async () => {
+                                return await dbconn.getData(`$Main/Content/getDetailCols`, obj, res);
+                            }
+                        break;
+                        case 'searchparams':
+                            const fetchData = async () => {
+                                let arr = new Array();
+                                arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
+                                arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
+                                arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
+                                arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
+                    
+                                return await dbconn.getDataAll(arr)
+                                .then((res) => {
+                                    return common.uSearch_trans(res[0], res[1], res[2], res[3]);
+                                });
+                            }
+                        break;
                         case 'total':
                             fetchData = async () => {
                                 let data = await dbconn.getData(`$Main/Content/Sub0201/getTotalData`, obj, res);
