@@ -14,6 +14,7 @@ async function run(oracledb, obj) {
 
     let binds = {
       orgcd : obj.uInfo[1],
+      pages : obj.pages,
     };
 
     let options = {
@@ -29,7 +30,7 @@ async function run(oracledb, obj) {
       DEFAULT_YN, 
       SORT
     FROM TB_BAS_SEARCHBOX_NEW
-    WHERE ORG_CD = :orgcd
+    WHERE ORG_CD = :orgcd AND PAGE = :pages
     ORDER BY PAGE ASC, DEFAULT_YN DESC, SORT ASC
     `
 
