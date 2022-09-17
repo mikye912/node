@@ -11,17 +11,38 @@ async function run(oracledb) {
       connectString: config.connectString
     });
 
+    let binds = {
+      orgcd : obj.uInfo[1],
+      userid : obj.uInfo[0],
+      pages : obj.pages,
+    };
+
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
     let query = `
-    SELECT PUR_CD ||','||PUR_KIS AS VALUE, PUR_NM AS NAME FROM TB_BAS_PURINFO WHERE PUR_USE='Y' ORDER BY PUR_SORT ASC
+    SELECT 
+      --ORG_CD,
+      HEADERNAME AS "headerName",
+      HEADERALIGN AS "headerAlign",
+      "TYPE" AS "type",
+      WIDTH AS "width",
+      ALIGN AS "align",
+      FIELD AS "field",
+      PAGE AS "page",
+      SORT AS "sort",
+      VISIABLE AS "visiable",
+      CATEGORY AS "category"
+      --USER_ID
+    FROM TB_SYS_DOMAIN_NEW 
+      WHERE ORG_CD = :orgcd AND USER_ID = :userid AND CATEGORY = 'TOTAL' AND PAGE = :pages
+      ORDER BY SORT
     `
 
-    let debugQuery = require('bind-sql-string').queryBindToString(query, [], { quoteEscaper: "''" });
+    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
     common.logger('info', `query debug => ${debugQuery}`);
 
-    result = await connection.execute(query, [], options);
+    result = await connection.execute(query, binds, options);
     
     let rst = result.rows;
     
