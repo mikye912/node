@@ -125,9 +125,6 @@ async function run(oracledb, obj) {
       EXTRA_WHERE = ` WHERE ${EXTRA_WH.join(' AND ')} `;
     }
 
-    //console.log("SET_WHERE : ",SET_WHERE);
-    //console.log("EXTRA_WHERE : ",EXTRA_WHERE);
-
     let binds = {
       orgcd: obj.uInfo[1],
     };
@@ -135,131 +132,68 @@ async function run(oracledb, obj) {
     let options = {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
-    // TODO 쿼리에 지역화폐, 카카오페이 추가하기
+
     let query = `
-    SELECT
-		    CASE WHEN TERM_NM IS NULL THEN '합계' ELSE TERM_NM END TERM_NM
-        ,TOTCNT
-        ,TOTAMT
-        ,ACNT
-        ,AAMT
-        ,CCNT
-        ,CAMT
-        ,KB
-        ,NH
-        ,LO
-        ,BC
-        ,SS
-        ,SI
-        ,HN
-        ,HD
-        ,RP
-        ,AP
-        ,WP
-        ,ZP
-        ,KP
-    FROM(    
+    SELECT 
+      APPDD,
+      PUR_NM,
+      TOTCNT,
+      TOTAMT,
+      ACNT,
+      AAMT,
+      CCNT,
+      CAMT
+    FROM
+      (
+      SELECT 
+        APPDD, 
+        CASE 
+          WHEN GROUPING(PUR_NM) = 1 AND GROUPING(APPDD) = 1 THEN '합계'
+          WHEN PUR_NM IS NULL THEN '소계' ELSE PUR_NM
+        END PUR_NM, 
+        GROUPING(APPDD) AS GR_APPDD,
+        GROUPING(PUR_NM) AS GR_PUR_NM,
+        SUM(ACNT+CCNT) AS TOTCNT, 
+        SUM(AAMT-CAMT) AS TOTAMT, 
+        SUM(ACNT) AS ACNT, 
+        SUM(AAMT) AS AAMT, 
+        SUM(CCNT) AS CCNT, 
+        SUM(CAMT) AS CAMT
+      FROM(
         SELECT
-        	TERM_NM
-            ,SUM(ACNT)+SUM(CCNT) TOTCNT
-            ,SUM(AAMT)-SUM(CAMT) TOTAMT
-            ,SUM(ACNT) ACNT
-            ,SUM(AAMT) AAMT
-            ,SUM(CCNT) CCNT
-            ,SUM(CAMT) CAMT
-            ,SUM(AKB)-SUM(CKB) KB
-            ,SUM(ANH)-SUM(CNH) NH
-            ,SUM(ALO)-SUM(CLO) LO
-            ,SUM(ABC)-SUM(CBC) BC
-            ,SUM(ASS)-SUM(CSS) SS
-            ,SUM(ASI)-SUM(CSI) SI
-            ,SUM(AHN)-SUM(CHN) HN
-            ,SUM(AHD)-SUM(CHD) HD
-            ,SUM(ARP)-SUM(CRP) RP
-            ,SUM(AAP)-SUM(CAP) AP
-            ,SUM(AWP)-SUM(CWP) WP
-            ,SUM(AZP)-SUM(CZP) ZP
-            ,SUM(AKP)-SUM(CKP) KP
-        FROM(    
-            SELECT
-                TERM_NM
-                ,CASE WHEN APPGB='A' THEN COUNT(1) ELSE 0 END ACNT
-                ,CASE WHEN APPGB='A' THEN SUM(AMOUNT) ELSE 0 END AAMT
-                ,CASE WHEN APPGB='C' THEN COUNT(1) ELSE 0 END CCNT
-                ,CASE WHEN APPGB='C' THEN SUM(AMOUNT) ELSE 0 END CAMT
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0001', '016', '02') THEN SUM(AMOUNT) ELSE 0 END AKB
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0001', '016', '02') THEN SUM(AMOUNT) ELSE 0 END CKB
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END ANH
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0030', '018', '11') THEN SUM(AMOUNT) ELSE 0 END CNH
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0003', '047', '33') THEN SUM(AMOUNT) ELSE 0 END ALO
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0003', '047', '33') THEN SUM(AMOUNT) ELSE 0 END CLO
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END ABC
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0006', '026', '01') THEN SUM(AMOUNT) ELSE 0 END CBC
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END ASS
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0004', '031', '06') THEN SUM(AMOUNT) ELSE 0 END CSS
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0007', '029', '07') THEN SUM(AMOUNT) ELSE 0 END ASI
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0007', '029', '07') THEN SUM(AMOUNT) ELSE 0 END CSI
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END AHN
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0005', '008', '03') THEN SUM(AMOUNT) ELSE 0 END CHN
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END AHD
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0002', '027', '08') THEN SUM(AMOUNT) ELSE 0 END CHD
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END ARP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END CRP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0010', '0003') THEN SUM(AMOUNT) ELSE 0 END AAP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0010', '0003') THEN SUM(AMOUNT) ELSE 0 END CAP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0012', '0009') THEN SUM(AMOUNT) ELSE 0 END AWP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0012', '0009') THEN SUM(AMOUNT) ELSE 0 END CWP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('VC0083', '9999') THEN SUM(AMOUNT) ELSE 0 END AZP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('VC0083', '9999') THEN SUM(AMOUNT) ELSE 0 END CZP
-                ,CASE WHEN APPGB='A' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END AKP
-                ,CASE WHEN APPGB='C' AND ACQ_CD IN ('', '', '') THEN SUM(AMOUNT) ELSE 0 END CKP
-            FROM (
-                SELECT
-                SEQNO, DEP_NM, TERM_NM, TID, MID, PUR_NM, ACQ_CD, 
-                AUTHSTAT, APPDD, APPTM, OAPPDD, APPNO, APPGB,
-                APPGB_TXT, CARDNO,   AMOUNT,   HALBU, CARDTP_TXT, SIGNCHK_TXT,
-                AUTHCD,   EXT_FIELD,   TRANIDX, AUTHMSG
-            FROM(
-                SELECT
-                SEQNO, DEP_NM, TERM_NM, TID, MID, PUR_NM, 
-                CASE
-                    WHEN APPGB='A' AND OAPP_AMT IS NULL THEN (SELECT SCD_DIP FROM TB_BAS_SITECODE WHERE ORG_CD=:orgcd AND SCD_CD='SCD0011') 
-                    WHEN APPGB='A' AND OAPP_AMT = APPDD THEN (SELECT SCD_DIP FROM TB_BAS_SITECODE WHERE ORG_CD=:orgcd AND SCD_CD='SCD0012')
-                    WHEN APPGB='A' AND OAPP_AMT <> APPDD THEN (SELECT SCD_DIP FROM TB_BAS_SITECODE WHERE ORG_CD=:orgcd AND SCD_CD='SCD0013')
-                    WHEN APPGB='C' AND OAPPDD = APPDD THEN (SELECT SCD_DIP FROM TB_BAS_SITECODE WHERE ORG_CD=:orgcd AND SCD_CD='SCD0012') 
-                    WHEN APPGB='C' AND OAPPDD <> APPDD THEN (SELECT SCD_DIP FROM TB_BAS_SITECODE WHERE ORG_CD=:orgcd AND SCD_CD='SCD0013') 
-                END AUTHSTAT,
-                APPDD, APPTM, OAPPDD, APPNO, APPGB, ACQ_CD,
-                CASE 
-                    WHEN APPGB='A' THEN '신용승인'
-                    WHEN APPGB='C' THEN '신용취소'
-                END APPGB_TXT,
-                CARDNO,   AMOUNT,   HALBU,
-                CASE WHEN CHECK_CARD='Y' THEN '체크카드' ELSE '신용카드' END CARDTP_TXT,
-                CASE WHEN SIGNCHK='1' THEN '전자서명' ELSE '무서명' END SIGNCHK_TXT,
-                AUTHCD, EXT_FIELD,   TRANIDX, AUTHMSG
-                FROM(
-                SELECT
-                    SEQNO, BIZNO, TID, MID, VANGB, MDATE, SVCGB, T1.TRANIDX, T1.APPGB, ENTRYMD,
-                    T1.APPDD, APPTM, T1.APPNO, T1.CARDNO, HALBU, CURRENCY, T1.AMOUNT, AMT_UNIT, AMT_TIP, AMT_TAX,
-                    ISS_CD, ISS_NM, ACQ_CD, ACQ_NM, AUTHCD, AUTHMSG, CARD_CODE, CHECK_CARD, OVSEA_CARD, TLINEGB,
-                    SIGNCHK, DDCGB, EXT_FIELD, OAPPNO, OAPPDD, OAPPTM, OAPP_AMT, ADD_GB, ADD_CID, ADD_CD,
-                    ADD_RECP, ADD_CNT, ADD_CASHER, ADD_DATE, SECTION_NO, PUR_NM, DEP_NM, TERM_NM 
-                FROM
-                    ${obj.uInfo[5]} T1  
-                LEFT OUTER JOIN( SELECT DEP_CD, TERM_NM, TERM_ID FROM TB_BAS_TIDMST ${ORG_WH})T3 ON(T1.TID=T3.TERM_ID)
-                LEFT OUTER JOIN( SELECT DEP_NM, DEP_CD FROM TB_BAS_DEPART ${ORG_WH})T4 ON(T3.DEP_CD=T4.DEP_CD)
-                LEFT OUTER JOIN( SELECT PUR_NM, PUR_OCD, PUR_KOCES, PUR_KIS FROM TB_BAS_PURINFO)T5 ON (T1.ACQ_CD=T5.PUR_OCD OR T1.ACQ_CD=T5.PUR_KOCES OR T1.ACQ_CD=T5.PUR_KIS)
-                ${SET_WHERE}
-                )
-            )
-            ${EXTRA_WHERE}
-        )
-        GROUP BY TERM_NM, APPGB, ACQ_CD
-        )
-        GROUP BY ROLLUP(TERM_NM)
-        ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
-      )
+          ACQ_CD, 
+          APPDD, 
+          SUM(ACNT) AS ACNT, 
+          SUM(CCNT) AS CCNT, 
+          SUM(AAMT) AS AAMT, 
+          SUM(CAMT) AS CAMT
+        FROM(
+          SELECT
+            ACQ_CD,
+            APPDD,
+            CASE
+              WHEN APPGB='A' THEN COUNT(1) ELSE 0 
+            END ACNT,
+            CASE
+              WHEN APPGB='A' THEN SUM(AMOUNT) ELSE 0
+            END AAMT,
+            CASE
+              WHEN APPGB='C' THEN COUNT(1) ELSE 0
+            END CCNT,
+            CASE
+              WHEN APPGB='C' THEN SUM(AMOUNT) ELSE 0
+            END CAMT
+          FROM 
+            GLOB_MNG_ICVAN_NICE
+            ${SET_WHERE}
+          GROUP BY ACQ_CD, APPDD, APPGB
+        )T1
+        GROUP BY ACQ_CD, APPDD
+      )T1
+      LEFT OUTER JOIN( SELECT PUR_NM, PUR_KOCES, PUR_OCD, PUR_KIS, PUR_NICE, PUR_CD, PUR_SORT FROM TB_BAS_PURINFO)T5 ON(T1.ACQ_CD=T5.PUR_OCD OR T1.ACQ_CD=T5.PUR_KOCES OR T1.ACQ_CD=T5.PUR_CD OR T1.ACQ_CD=T5.PUR_KIS OR T1.ACQ_CD=T5.PUR_NICE)
+      GROUP BY ROLLUP(APPDD, PUR_NM)
+      ) 
+    ORDER BY GR_APPDD DESC, APPDD, GR_PUR_NM ASC
     `
 
     let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });

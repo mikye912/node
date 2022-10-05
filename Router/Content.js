@@ -141,12 +141,6 @@ router.route('/:pages/:do')
                             return common.setRnumData(data);
                         }
                         break;
-                    case 'detail':
-                        fetchData = async () => {
-                            let data = await dbconn.getData(`$Main/Content/Sub0202/getDetailData`, obj, res);
-                            return common.setRnumData(data);
-                        }
-                        break;
                     default:
                         break;
                 }
