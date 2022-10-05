@@ -158,6 +158,62 @@ router.route('/:pages/:do')
                 }
                 break;
             case '0203':
+                if (!common.isEmptyObj(req.query)) {
+                    obj.where = JSON.parse(common.cryptoDec(req.query.reqData));
+                    console.log(obj.where);
+                } else {
+                    console.log('빈 객체');
+                }
+                switch (req.params.do) {
+                    case 'totalcols':
+                        obj.pages = req.params.pages;
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/getTotalCols`, obj, res);
+                        }
+                        break;
+                    case 'detailcols':
+                        obj.pages = req.params.pages;
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/getDetailCols`, obj, res);
+                        }
+                        break;
+                    case 'searchparams':
+                        obj.pages = req.params.pages;
+
+                        fetchData = async () => {
+                            let arr = new Array();
+                            arr = [...arr, dbconn.createPromise('$Main/Content/getUserSearch', obj)];
+                            arr = [...arr, dbconn.createPromise('$Main/Content/getUserDepart', obj)];
+                            arr = [...arr, dbconn.createPromise('$Main/Content/getUserTid', obj)];
+                            arr = [...arr, dbconn.createPromise('$Main/Content/getUserAcq')];
+
+                            return await dbconn.getDataAll(arr)
+                                .then((res) => {
+                                    return common.uSearch_trans(res[0], res[1], res[2], res[3]);
+                                });
+                        }
+                        break;
+                    case 'categories':
+                        obj.pages = req.params.pages;
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/getCategory`, obj, res);
+                        }
+                        break;
+                    case 'total':
+                        fetchData = async () => {
+                            let data = await dbconn.getData(`$Main/Content/Sub0203/getTotalData`, obj, res);
+                            return common.setRnumData(data);
+                        }
+                        break;
+                    case 'detail':
+                        fetchData = async () => {
+                            let data = await dbconn.getData(`$Main/Content/Sub0203/getDetailData`, obj, res);
+                            return common.setRnumData(data, 'ADD_CASHER');
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case '0204':
                 break;

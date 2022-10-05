@@ -99,7 +99,7 @@ async function run(oracledb, obj) {
       ADDWHERE = ` AND ${WH.join(' AND ')} `;
     }
 
-    let SET_WHERE = `WHERE SVCGB IN ('CC', 'CE') AND AUTHCD='0000' AND TID IN (SELECT TID FROM TB_BAS_TIDMAP ${USER_AUTH})  ${ADDWHERE}`;
+    let SET_WHERE = `WHERE SVCGB IN ('CC', 'CE') AND ADD_GB IN ('1', '2', '3', 'O', 'I', 'E', 'C', 'G', 'K') AND AUTHCD='0000' AND TID IN (SELECT TID FROM TB_BAS_TIDMAP ${USER_AUTH})  ${ADDWHERE}`;
 
     let AUTH_IN = new Array();
     let EXTRA_WH = new Array();
@@ -156,8 +156,8 @@ async function run(oracledb, obj) {
           CASE WHEN APPGB='C' THEN COUNT(1) ELSE 0 END CCNT,
           CASE WHEN APPGB='C' THEN SUM(AMOUNT) ELSE 0 END CAMT
         FROM 
-          GLOB_MNG_ICVAN_NICE
-          WHERE SVCGB IN ('CC', 'CE') AND ADD_GB IN ('1', '2', '3', 'O', 'I', 'E', 'C', 'G', 'K') AND AUTHCD='0000' AND TID IN (select tid from tb_bas_tidmap  where org_cd='OR032')  AND APPDD>='20221001' AND APPDD<='20221030'
+          ${obj.uInfo[5]}
+          ${SET_WHERE}
         GROUP BY APPGB
       )
     )T1
