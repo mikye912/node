@@ -383,10 +383,10 @@ module.exports = {
      * @param {Array} arr DB 결과 데이터를 담은 Array 객체
      * @returns ROWNUM을 추가한 Array 객체를 반환
      */
-    setRnumData: (arr) => {
+    setRnumData: (arr, keys) => {
         let cnt = 1;
         arr = arr.map((crr) => {
-            if (crr.TERM_NM !== '합계' && crr.TERM_NM !== '소계') {
+            if (crr[keys] !== '합계' && crr[keys] !== '소계') {
                 crr = {
                     ROWNUM: cnt, ...crr
                 }

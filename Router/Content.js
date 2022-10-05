@@ -92,7 +92,7 @@ router.route('/:pages/:do')
                     case 'total':
                         fetchData = async () => {
                             let data = await dbconn.getData(`$Main/Content/Sub0201/getTotalData`, obj, res);
-                            return common.setRnumData(data);
+                            return common.setRnumData(data, 'TERM_NM');
                         }
                         break;
                     case 'detail':
@@ -150,7 +150,7 @@ router.route('/:pages/:do')
                     case 'total':
                         fetchData = async () => {
                             let data = await dbconn.getData(`$Main/Content/Sub0202/getTotalData`, obj, res);
-                            return common.setRnumData(data);
+                            return common.setRnumData(data, 'PUR_NM');
                         }
                         break;
                     default:
