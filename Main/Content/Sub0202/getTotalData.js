@@ -184,7 +184,7 @@ async function run(oracledb, obj) {
               WHEN APPGB='C' THEN SUM(AMOUNT) ELSE 0
             END CAMT
           FROM 
-            GLOB_MNG_ICVAN_NICE
+            ${obj.uInfo[5]}
             ${SET_WHERE}
           GROUP BY ACQ_CD, APPDD, APPGB
         )T1
@@ -196,10 +196,10 @@ async function run(oracledb, obj) {
     ORDER BY GR_APPDD DESC, APPDD, GR_PUR_NM ASC
     `
 
-    let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
+    let debugQuery = require('bind-sql-string').queryBindToString(query, [], { quoteEscaper: "''" });
     common.logger('info', `query debug => ${debugQuery}`);
 
-    result = await connection.execute(query, binds, options);
+    result = await connection.execute(query, [], options);
 
     let rst = result.rows;
     //console.log(rst)
