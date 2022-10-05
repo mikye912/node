@@ -32,39 +32,39 @@ async function run(oracledb, obj) {
     }
 
     if (obj.where.SDATE) {
-      WH = [...WH, ` T1.APPDD >= '${common.regReplace(obj.where.SDATE)}' `];
+      WH = [...WH, ` APPDD >= '${common.regReplace(obj.where.SDATE)}' `];
     }
     if (obj.where.EDATE) {
-      WH = [...WH, ` T1.APPDD <= '${common.regReplace(obj.where.EDATE)}' `];
+      WH = [...WH, ` APPDD <= '${common.regReplace(obj.where.EDATE)}' `];
     }
     if (obj.where.SAMOUNT) {
-      WH = [...WH, ` T1.AMOUNT >= '${common.regReplace(obj.where.SAMOUNT)}' `];
+      WH = [...WH, ` AMOUNT >= '${common.regReplace(obj.where.SAMOUNT)}' `];
     }
     if (obj.where.EAMOUNT) {
-      WH = [...WH, ` T1.AMOUNT <= '${common.regReplace(obj.where.EAMOUNT)}' `];
+      WH = [...WH, ` AMOUNT <= '${common.regReplace(obj.where.EAMOUNT)}' `];
     }
     if (obj.where.APPNO) {
-      WH = [...WH, ` T1.APPNO = '${obj.where.APPNO}' `];
+      WH = [...WH, ` APPNO = '${obj.where.APPNO}' `];
     }
     if (obj.where.ADD_CID) {
-      WH = [...WH, ` T1.ADD_CID LIKE '%${obj.where.ADD_CID}%' `];
+      WH = [...WH, ` ADD_CID LIKE '%${obj.where.ADD_CID}%' `];
     }
     if (obj.where.ACQ_CD) {
       const ACQ_CD = obj.where.ACQ_CD;
-      WH = [...WH, ` T1.ACQ_CD IN ('${ACQ_CD.split(',').join("','")}') `];
+      WH = [...WH, ` ACQ_CD IN ('${ACQ_CD.split(',').join("','")}') `];
     }
     if (obj.where.TID) {
-      WH = [...WH, ` T1.TID IN ('${obj.where.TID.join("','")}') `];
+      WH = [...WH, ` TID IN ('${obj.where.TID.join("','")}') `];
     }
 
     if (obj.where.MID) {
-      WH = [...WH, ` T1.MID LIKE '%${obj.where.MID}%' `];
+      WH = [...WH, ` MID LIKE '%${obj.where.MID}%' `];
     }
     if (obj.where.ADD_CASHER) {
-      WH = [...WH, ` T1.ADD_CASHER = '${obj.where.ADD_CASHER}' `];
+      WH = [...WH, ` ADD_CASHER = '${obj.where.ADD_CASHER}' `];
     }
     if (obj.where.ADD_CD) {
-      WH = [...WH, ` T1.ADD_CD = '${obj.where.ADD_CD}' `];
+      WH = [...WH, ` ADD_CD = '${obj.where.ADD_CD}' `];
     }
     if (obj.where.ADD_GB) {
       let ADD_GB = '';
@@ -76,23 +76,23 @@ async function run(oracledb, obj) {
         case 'G': ADD_GB = "'5', 'G'"; break;
         default: ADD_GB = ""; break;
       }
-      WH = [...WH, ` T1.ADD_GB IN (${ADD_GB}) `];
+      WH = [...WH, ` ADD_GB IN (${ADD_GB}) `];
     }
     if (obj.where.CARDNO) {
-      WH = [...WH, ` T1.MEDI_GOODS LIKE '%${obj.where.CARDNO}%' `];
+      WH = [...WH, ` MEDI_GOODS LIKE '%${obj.where.CARDNO}%' `];
     }
     if (obj.where.OVSEA_CARD) {
       if (obj.where.OVSEA_CARD === 'Y') {
-        WH = [...WH, ` T1.ISS_CD IN ('09') `];
+        WH = [...WH, ` ISS_CD IN ('09') `];
       } else {
-        WH = [...WH, ` T1.ISS_CD NOT IN ('09') `];
+        WH = [...WH, ` ISS_CD NOT IN ('09') `];
       }
     }
     if (obj.where.CHECK_CARD) {
       if (obj.where.CHECK_CARD === 'Y') {
-        WH = [...WH, ` T1.CHECK_CARD = 'Y' `];
+        WH = [...WH, ` CHECK_CARD = 'Y' `];
       } else {
-        WH = [...WH, ` T1.CHECK_CARD = 'N' `];
+        WH = [...WH, ` CHECK_CARD = 'N' `];
       }
     }
     if (!common.isEmptyArr(WH)) {
