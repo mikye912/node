@@ -10,7 +10,7 @@ async function run(oracledb, obj) {
       password: config.password,
       connectString: config.connectString
     });
-    
+
     let binds = {
       orgcd: obj.uInfo[1],
       page: obj.pages
@@ -20,7 +20,7 @@ async function run(oracledb, obj) {
       outFormat: oracledb.OUT_FORMAT_OBJECT
     };
     let query = `
-    SELECT CATEGORY FROM TB_SYS_DOMAIN_NEW WHERE ORG_CD = :orgcd AND PAGE = :pages GROUP BY CATEGORY
+    SELECT CATEGORY FROM TB_SYS_DOMAIN_NEW WHERE ORG_CD = :orgcd AND PAGE = :page GROUP BY CATEGORY
     `
 
     let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
