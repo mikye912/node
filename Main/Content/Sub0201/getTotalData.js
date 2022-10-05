@@ -138,7 +138,7 @@ async function run(oracledb, obj) {
     // TODO 쿼리에 지역화폐, 카카오페이 추가하기
     let query = `
     SELECT
-		    CASE WHEN TERM_NM IS NULL THEN '합계' ELSE TERM_NM END TERM_NM
+        TERM_NM
         ,TOTCNT
         ,TOTAMT
         ,ACNT
@@ -160,7 +160,10 @@ async function run(oracledb, obj) {
         ,KP
     FROM(    
         SELECT
-        	TERM_NM
+            CASE 
+              WHEN GROUPING(TERM_NM) = 1 THEN '합계' ELSE TERM_NM
+            END TERM_NM
+            ,GROUPING(TERM_NM) AS GR_TERM_NM
             ,SUM(ACNT)+SUM(CCNT) TOTCNT
             ,SUM(AAMT)-SUM(CAMT) TOTAMT
             ,SUM(ACNT) ACNT
@@ -258,8 +261,8 @@ async function run(oracledb, obj) {
         GROUP BY TERM_NM, APPGB, ACQ_CD
         )
         GROUP BY ROLLUP(TERM_NM)
-        ORDER BY (CASE WHEN TERM_NM IS NULL THEN 1 ELSE 2 END), TERM_NM ASC
       )
+      ORDER BY GR_TERM_NM DESC, TERM_NM ASC
     `
 
     let debugQuery = require('bind-sql-string').queryBindToString(query, binds, { quoteEscaper: "''" });
