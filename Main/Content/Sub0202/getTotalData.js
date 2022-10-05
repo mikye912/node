@@ -202,7 +202,7 @@ async function run(oracledb, obj) {
     result = await connection.execute(query, [], options);
 
     let rst = result.rows;
-    console.log(rst)
+    //console.log(rst)
     return rst;
   } catch (err) {
     console.error(err);
