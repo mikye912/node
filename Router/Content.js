@@ -83,6 +83,12 @@ router.route('/:pages/:do')
                                 });
                         }
                         break;
+                    case 'categories':
+                        obj.pages = req.params.pages;
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/getCategory`, obj, res);
+                        }
+                        break;
                     case 'total':
                         fetchData = async () => {
                             let data = await dbconn.getData(`$Main/Content/Sub0201/getTotalData`, obj, res);
@@ -133,6 +139,12 @@ router.route('/:pages/:do')
                                 .then((res) => {
                                     return common.uSearch_trans(res[0], res[1], res[2], res[3]);
                                 });
+                        }
+                        break;
+                    case 'categories':
+                        obj.pages = req.params.pages;
+                        fetchData = async () => {
+                            return await dbconn.getData(`$Main/Content/getCategory`, obj, res);
                         }
                         break;
                     case 'total':
