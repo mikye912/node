@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/instantclient_21_3
+/instantclient_21_7
 /logs
 /.pnp
 .pnp.js
