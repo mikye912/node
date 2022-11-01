@@ -1,5 +1,5 @@
 const oracledb = require('oracledb');
-oracledb.initOracleClient({ libDir: "./instantclient_21_7" }); // Window
+oracledb.initOracleClient({ libDir: "./instantclient_21_3" }); // Window
 //oracledb.initOracleClient({ configDir: "./instantclient_21_7" }); // Linux
 const sql = require('bind-sql-string');
 
